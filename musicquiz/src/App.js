@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      playlists: []
+    }
+  }
+
+ 
+  handleClick = () => {
+    const access_token = window.location.hash.split('=')[1].split('&')[0];
+    const refresh_token = window.location.hash.split('refresh_token=')[1];
+    fetch('https://api.spotify.com/v1/me/playlists', {
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer ' + access_token
+          }
+        })
+          .then(response => response.json())
+          .then(data =>{ console.log('we fetch', data)
+          this.setState({playlists: data.items })
+        });
+  }
+  render() {
+    return (
+      <div className="App">
+        <h1>Hello Quiz!</h1>
+        <a href="http://localhost:5000/login">Click for login</a>
+        <button onClick={this.handleClick}>Show Genres</button>
+        {this.state.playlists.map(playlist => {
+        return <div>{playlist.name}</div>
+        })}
+      </div>
+    );
+  }
 }
 
 export default App;
