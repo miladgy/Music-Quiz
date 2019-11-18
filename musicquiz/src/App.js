@@ -32,7 +32,7 @@ class App extends React.Component {
         <a href="http://localhost:5000/login">Click for login</a>
         <button onClick={this.handleClick}>Show Genres</button>
         {this.state.playlists.map(playlist => {
-        return <div>{playlist.name}</div>
+        return <div>{playlist.name} {playlist.id}</div>
         })}
       </div>
     );
