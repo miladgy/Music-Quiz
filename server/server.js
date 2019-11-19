@@ -135,6 +135,55 @@ app.get('/playlist/:id', (req, res) => {
   .then(response => response.json())
   .then(data => res.send(data.tracks.items))
 })
+app.get('/random/:id', (req, res) => {
+  const access_token = req.query.token
+  fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ' + access_token
+    }
+  })
+  .then(response => response.json())
+  .then(data => (data.tracks.items))
+  .then(tracks => {
+    let arr = [];
+    const numberOfQuestions = 6
+    while (arr.length < numberOfQuestions){
+      let randomizer = tracks[Math.floor(Math.random()*tracks.length)];
+      let questionObject = {}
+      questionObject.correct = randomizer.track.name;
+      console.log(questionObject)
+      arr.push(questionObject)
+    }
+    res.send(arr)
+    /*
+      {
+        "correct": {
+          "correct_title": tracks.track.name, 
+          "correct_artist": tracks.track.artists[0].name,
+          "correct_preview": tracks.track.preview_url
+        },
+        "incorrect": { 
+          [
+            tracks.track.artists[2].name,
+            tracks.track.artists[3].name,
+            tracks.track.artists[4].name
+          ]
+        }
+      }
+    */
+
+    // CORRECT
+    // Artist = tracks.track.artists[0].name
+    // Title = tracks.track.name
+    // Preview_URL = tracks.track.preview_url
+
+    // INCORRECT
+    // Artist = tracks.track.artists[0].name
+    // Title = tracks.track.name
+  })
+})
 
 app.get('/song',  (req, res) => {
   console.log('inside song')
