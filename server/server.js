@@ -4,11 +4,15 @@ const fetch = require('node-fetch');
 const cors = require('cors');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
+const Musixmatch = require('musixmatch-node');
 require('dotenv').config();
 
-const client_id = process.env.EXPRESS_API_ID; // Your client id
-const client_secret = process.env.EXPRESS_API_SECRET; // Your secret
-const redirect_uri = process.env.EXPRESS_REDIRECT_URI; // Your redirect uri
+const mxm_Api = process.env.EXPRESS_MXM_API; 
+const client_id = process.env.EXPRESS_API_ID; 
+const client_secret = process.env.EXPRESS_API_SECRET; 
+const redirect_uri = process.env.EXPRESS_REDIRECT_URI; 
+const mxm = new Musixmatch(mxm_Api)
+
 
 /**
  * Generates a random string containing numbers and letters
@@ -83,7 +87,7 @@ app.get('/callback', (req, res) => {
       .then(data => {
         const { access_token, refresh_token } = data;
 
-        fetch('https://api.spotify.com/v1/me/playlists', {
+        fetch('https://api.spotify.com/v1/playlists/37i9dQZF1DWXfgo3OOonqa', {
           headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -107,7 +111,55 @@ app.get('/callback', (req, res) => {
       })
   }
 });
+app.get('/playlist', (req, res) => {
+  const access_token = req.query.token
+  fetch(`https://api.spotify.com/v1/me/playlists`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ' + access_token
+    }
+  })
+  .then(response => response.json())
+  .then(data => res.send(data.items))
+})
+app.get('/playlist/:id', (req, res) => {
+  const access_token = req.query.token
+  fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ' + access_token
+    }
+  })
+  .then(response => response.json())
+  .then(data => res.send(data.tracks.items))
+})
 
+app.get('/song',  (req, res) => {
+  console.log('inside song')
+
+  const access_token = ''
+  fetch('https://api.spotify.com/v1/playlists/6Ma3ZIHYF3y9f0qs1shYe1', {
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer ' + access_token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('we fetch', data)
+            const artist = data.tracks.items[0].track.artists[0].name.toString();
+            const title = data.tracks.items[0].track.name.toString();
+            console.log(title, artist);
+            const lyrics =  mxm.getLyricsMatcher({
+              q_track: title,
+              q_artist: artist          
+            })
+            .then(lyrics => res.send(lyrics.message.body.lyrics.lyrics_body))
+          }).catch(error => { console.log('something went wrong here', error)}); 
+})
 app.get('/refresh_token', (req, res) => {
 
   // requesting access token from refresh token
@@ -133,6 +185,8 @@ app.get('/refresh_token', (req, res) => {
       });
     })
 });
+
+
 
 console.log('Listening on 5000');
 app.listen(5000);
