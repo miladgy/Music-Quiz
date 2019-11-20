@@ -7,10 +7,10 @@ const cookieParser = require('cookie-parser');
 const Musixmatch = require('musixmatch-node');
 require('dotenv').config();
 
-const mxm_Api = process.env.EXPRESS_MXM_API; 
-const client_id = process.env.EXPRESS_API_ID; 
-const client_secret = process.env.EXPRESS_API_SECRET; 
-const redirect_uri = process.env.EXPRESS_REDIRECT_URI; 
+const mxm_Api = process.env.EXPRESS_MXM_API;
+const client_id = process.env.EXPRESS_API_ID;
+const client_secret = process.env.EXPRESS_API_SECRET;
+const redirect_uri = process.env.EXPRESS_REDIRECT_URI;
 const mxm = new Musixmatch(mxm_Api)
 
 
@@ -120,8 +120,8 @@ app.get('/playlist', (req, res) => {
       "Authorization": 'Bearer ' + access_token
     }
   })
-  .then(response => response.json())
-  .then(data => res.send(data.items))
+    .then(response => response.json())
+    .then(data => res.send(data.items))
 })
 app.get('/playlist/:id', (req, res) => {
   const access_token = req.query.token
@@ -132,9 +132,20 @@ app.get('/playlist/:id', (req, res) => {
       "Authorization": 'Bearer ' + access_token
     }
   })
-  .then(response => response.json())
-  .then(data => res.send(data.tracks.items))
+    .then(response => response.json())
+    .then(data => res.send(data.tracks.items))
 })
+
+const getRandomTrack = (tracks) => {
+  let randomizer = tracks[Math.floor(Math.random() * tracks.length)];
+  let track = {};
+
+  track.title = randomizer.track.name;
+  track.artist = randomizer.track.artists[0].name;
+  track.preview = randomizer.track.preview_url;
+  return track;
+}
+
 app.get('/random/:id', (req, res) => {
   const access_token = req.query.token
   fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
@@ -144,70 +155,56 @@ app.get('/random/:id', (req, res) => {
       "Authorization": 'Bearer ' + access_token
     }
   })
-  .then(response => response.json())
-  .then(data => (data.tracks.items))
-  .then(tracks => {
-    let arr = [];
-    const numberOfQuestions = 6
-    while (arr.length < numberOfQuestions){
-      let randomizer = tracks[Math.floor(Math.random()*tracks.length)];
-      let questionObject = {}
-      questionObject.correct = randomizer.track.name;
-      console.log(questionObject)
-      arr.push(questionObject)
-    }
-    res.send(arr)
-    /*
-      {
-        "correct": {
-          "correct_title": tracks.track.name, 
-          "correct_artist": tracks.track.artists[0].name,
-          "correct_preview": tracks.track.preview_url
-        },
-        "incorrect": { 
-          [
-            tracks.track.artists[2].name,
-            tracks.track.artists[3].name,
-            tracks.track.artists[4].name
-          ]
+    .then(response => response.json())
+    .then(data => (data.tracks.items))
+    .then(tracks => {
+      let arr = [];
+      const numberOfQuestions = 6
+
+      while (arr.length < numberOfQuestions) {
+        const correctTrack = getRandomTrack(tracks);
+        let questionObject = {
+          correct: {},
+          incorrect: []
         }
+        questionObject.correct = correctTrack;
+        const incorrect = [];
+        while (incorrect.length !== 3) {
+          const incorrectTrack = getRandomTrack(tracks);
+          if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
+            incorrect.push(incorrectTrack);
+          }
+        }
+        questionObject.incorrect = incorrect;
+        arr.push(questionObject)
       }
-    */
-
-    // CORRECT
-    // Artist = tracks.track.artists[0].name
-    // Title = tracks.track.name
-    // Preview_URL = tracks.track.preview_url
-
-    // INCORRECT
-    // Artist = tracks.track.artists[0].name
-    // Title = tracks.track.name
-  })
+      res.send(arr);
+    })
 })
 
-app.get('/song',  (req, res) => {
+app.get('/song', (req, res) => {
   console.log('inside song')
 
   const access_token = ''
   fetch('https://api.spotify.com/v1/playlists/6Ma3ZIHYF3y9f0qs1shYe1', {
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": 'Bearer ' + access_token
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('we fetch', data)
-            const artist = data.tracks.items[0].track.artists[0].name.toString();
-            const title = data.tracks.items[0].track.name.toString();
-            console.log(title, artist);
-            const lyrics =  mxm.getLyricsMatcher({
-              q_track: title,
-              q_artist: artist          
-            })
-            .then(lyrics => res.send(lyrics.message.body.lyrics.lyrics_body))
-          }).catch(error => { console.log('something went wrong here', error)}); 
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ' + access_token
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('we fetch', data)
+      const artist = data.tracks.items[0].track.artists[0].name.toString();
+      const title = data.tracks.items[0].track.name.toString();
+      console.log(title, artist);
+      const lyrics = mxm.getLyricsMatcher({
+        q_track: title,
+        q_artist: artist
+      })
+        .then(lyrics => res.send(lyrics.message.body.lyrics.lyrics_body))
+    }).catch(error => { console.log('something went wrong here', error) });
 })
 app.get('/refresh_token', (req, res) => {
 
