@@ -11,7 +11,9 @@ class App extends React.Component {
       selectedPlaylist: [],
       myPlaylist: [],
       questions: [],
-      counter: 0
+      counter: 0,
+      round: 0,
+      isGameOver: false
     }
   }
 
@@ -114,7 +116,30 @@ class App extends React.Component {
   }
 
   addPoint = () => {
-    this.setState((prevState) => ({counter: prevState.counter +1 }))
+    if(this.state.round < 5) {
+      this.setState((prevState) => ({counter: prevState.counter +1, round: prevState.round +1 }))
+    } else {
+      console.log('do we get in here')
+      this.setState((prevState) => ({counter: prevState.counter +1, round: prevState.round +1, isGameOver: true}))
+    }
+  }
+  incorrectAnswer = () => {
+    if(this.state.round < 5) {
+      this.setState((prevState) => ({ round: prevState.round +1 }))
+    }
+    else {
+      console.log('do we get in here incorreecttttt')
+      this.setState((prevState) => ({round: prevState.round +1, isGameOver: true}))
+    }
+  }
+  testFunction = () => {
+    let audio = document.querySelector('.audio');
+    audio.addEventListener('click', function() {
+      setTimeout(() => {
+        this.audio.pause();
+        console.log('audio stopped successfully');
+      }, 5000);
+    })
   }
   
   render() {
@@ -152,10 +177,16 @@ class App extends React.Component {
 
         {/* show random */}
         <p>Show the random tracks</p>
-            {this.state.finishedLoading ? <div> 
-            <p onClick={this.addPoint}>Correct: {this.state.questions[0].correct.title}</p>
-            <p onClick={()=> console.log('are u stupid!?')}>Incorrect: {this.state.questions[0].incorrect.map(e => <p>{e.title}</p>)}</p>
-            </div>: this.state.spinner
+            {this.state.finishedLoading && !this.state.isGameOver
+            ? <div> 
+              <p>Round {this.state.round +1}</p>
+              <audio className="audio" onClick={this.testFunction} src={this.state.questions[this.state.round].correct.preview} controls type="audio/mpeg"/>
+              <p onClick={this.addPoint}>Correct: {this.state.questions[this.state.round].correct.title}</p>
+              <p onClick={this.incorrectAnswer}>Incorrect: {this.state.questions[this.state.round].incorrect.map(e => <p>{e.title}</p>)}</p>
+              </div>
+            : this.state.isGameOver
+              ? <div>Your score is: {this.state.counter}</div>
+              : this.state.spinner
           }
         
 
