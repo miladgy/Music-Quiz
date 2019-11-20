@@ -98,7 +98,7 @@ app.get('/callback', (req, res) => {
         })
           .then(response => response.json())
           .then(data => console.log('we fetch', data));
-        res.redirect('http://localhost:3000/#' +
+        res.redirect('http://localhost:3000/Gamemodes/#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
