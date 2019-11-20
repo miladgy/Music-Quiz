@@ -9,7 +9,9 @@ class App extends React.Component {
       finishedLoading: false,
       playlist: [],
       selectedPlaylist: [],
-      myPlaylist: []
+      myPlaylist: [],
+      questions: [],
+      counter: 0
     }
   }
 
@@ -76,8 +78,17 @@ class App extends React.Component {
     )
       .then(response => response.json())
       .then(data => {
-        console.log('random tracks', data)
-        this.setState({ playlist: data, finishedLoading: true })
+        const correctTitle = data[0].correct.title;
+        const incorrectTitle1 = data[0].incorrect[0].title;
+        const incorrectTitle2 = data[0].incorrect[1].title;
+        const incorrectTitle3 = data[0].incorrect[2].title;
+        
+
+
+        console.log('question object', data)
+        console.log('correct title', correctTitle)
+        console.log('incorrect title2', incorrectTitle2)
+        this.setState({ questions: data, finishedLoading: true })
       });
 
   }
@@ -102,6 +113,10 @@ class App extends React.Component {
       });
   }
 
+  addPoint = () => {
+    this.setState((prevState) => ({counter: prevState.counter +1 }))
+  }
+  
   render() {
     return (
       <div className="App">
@@ -127,11 +142,23 @@ class App extends React.Component {
                     <p>Who is singing: {this.state.playlist[0].track.name}?</p> :
                     this.state.spinner
                 } */}
+
+              {/* show tracks */}
         {this.state.myPlaylist.map((item, index) => {
           return <div key={index}>
             {item.name}
           </div>
         })}
+
+        {/* show random */}
+        <p>Show the random tracks</p>
+            {this.state.finishedLoading ? <div> 
+            <p onClick={this.addPoint}>Correct: {this.state.questions[0].correct.title}</p>
+            <p onClick={()=> console.log('are u stupid!?')}>Incorrect: {this.state.questions[0].incorrect.map(e => <p>{e.title}</p>)}</p>
+            </div>: this.state.spinner
+          }
+        
+
       </div>
     );
   }
