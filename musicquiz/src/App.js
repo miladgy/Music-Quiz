@@ -1,5 +1,14 @@
 import React from 'react';
 import './App.css';
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:5000');
+
+socket.on('message', (data) => {
+  console.log('This is the data from socket', data)
+})
+
+socket.emit('addClient', 'playerMilad');
+socket.emit('addClient', 'playerModi');
 
 class App extends React.Component {
   constructor(props) {
@@ -17,12 +26,6 @@ class App extends React.Component {
     }
   }
 
-  //   componentDidMount() {
-  //     const city = 'athens'
-  //     fetch(`http://localhost:5000/search/${city}`)
-  //     .then(res => res.json())
-  //     .then(data => this.setState({...this.state, cityWeather: data, finishedLoading: true}))
-  // }
 
   getAllPlaylists = () => {
     const access_token = window.location.hash.split('=')[1].split('&')[0];

@@ -1,4 +1,5 @@
 const express = require('express'); // Express web server framework
+const socket = require('socket.io');
 
 const request = require('request'); // "Request" library
 const fetch = require('node-fetch');
@@ -234,6 +235,44 @@ app.get('/refresh_token', (req, res) => {
 });
 
 
-
 console.log('Listening on 5000');
-app.listen(5000);
+const server = app.listen(5000);
+const io = socket(server);
+
+let usernames = [];
+let pairCount = 0;
+let pgmstart = 0;
+let id = 0;
+
+io.on('connection', (socket) => {
+  console.log('Web socket is being connected')
+  socket.emit('message', 'sending a message using sockets from the server' )
+
+  socket.on('addClient', (username) => {
+    const thePlayerName = {}
+    thePlayerName['user'] = username;
+    thePlayerName['score'] = 0;
+    usernames.push(thePlayerName);
+    console.log('Adding a client with addClient', username);
+
+    pairCount++;
+    if (pairCount === 1 || pairCount >= 3) {
+      id = Math.round((Math.random() * 1000000));
+			socket.room = id;
+			pairCount = 1;
+			console.log(`Amout of players: ${pairCount} - Room Number: ${id}`);
+			socket.join(id);
+			pgmstart = 1;
+    }
+    if (pairCount === 2) {
+      console.log(`Amout of players: ${pairCount} - Room Number: ${id}`);
+        	socket.join(id);
+          pgmstart = 2;
+          console.log(`All the players are here: ${usernames.map(e => e.user)}`)
+    }
+
+    socket.emit('updateroom', 'SERVER', 'You are connected! Waiting for other player to connect...', id)
+  })
+
+  socket.on("disconnect", () => console.log("Client disconnected"));
+})
