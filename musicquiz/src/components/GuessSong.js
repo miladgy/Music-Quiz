@@ -68,6 +68,10 @@ class GuessSong extends Component {
         }
     }
 
+    componentDidMount() {
+        this.getRandom();
+    }
+
     render() {
         return (
             <div>

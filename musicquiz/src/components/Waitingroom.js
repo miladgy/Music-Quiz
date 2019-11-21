@@ -1,14 +1,14 @@
 import React from 'react'
-// import openSocket from 'socket.io-client';
-// const socket = openSocket('http://localhost:5000');
+import { withRouter } from 'react-router';
 
-//   socket.emit('addClient', 'playerMilad from waiting room');
 
 class Waitingroom extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             users: []
+            // WE MUST STORE GAME MODES HERE SO START GAME
+            // BUTTON REALIZEZ WHAT GAME SHOULD BE STARTED
         }
     }
 
@@ -26,6 +26,10 @@ class Waitingroom extends React.Component {
         this.props.socket.emit('getinfo')
 
     }
+    startGame = (e) => {
+        e.preventDefault();
+        this.props.history.push('/GuessSong')
+    }
 
     render() {
         return (
@@ -33,11 +37,11 @@ class Waitingroom extends React.Component {
                 <p>This is the Waiting Room</p>
                 <p>List of people joined</p>
                 {this.state.users.map(user => <h4>{user}</h4>)}
-                <button>Start Game!</button>
+                <button onClick={this.startGame} >Start Game!</button>
 
 
             </div>
         )
     }
 }
-export default Waitingroom;
+export default withRouter(Waitingroom);
