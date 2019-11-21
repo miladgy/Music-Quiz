@@ -16,28 +16,8 @@ class Gamemodes extends React.Component {
             access_token: ''
           }
     }
-    componentDidMount() {
-        const access_token = window.location.hash.split('=')[1].split('&')[0];
-        this.props.setToken(access_token)
-    }
-  getAllPlaylists = () => {
-    const access_token = window.location.hash.split('=')[1].split('&')[0];
-    // const refresh_token = window.location.hash.split('refresh_token=')[1];
-    fetch(`http://localhost:5000/playlist?token=${access_token}`
-      // , {
-      // headers: {
-      //   "Accept": "application/json",
-      //   "Content-Type": "application/json",
-      //   "Authorization": 'Bearer ' + access_token
-      // }
-      // }
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log('get all playlists', data)
-        this.setState({ myPlaylist: data, access_token: access_token })
-      });
-  }
+  
+  
 
   getAllTracks = () => {
     const playlistId = '37i9dQZF1DWXfgo3OOonqa';
@@ -133,7 +113,7 @@ class Gamemodes extends React.Component {
         return (
             <div>
                 <button onClick={this.getAllTracks}>Show Tracks</button>
-          <button onClick={this.getAllPlaylists}>Show all playlists</button>
+         
           <button onClick={this.getRandom}>Show random</button>
 
           {this.state.playlist.map((playlist, index) => {
@@ -154,11 +134,7 @@ class Gamemodes extends React.Component {
                 } */}
 
           {/* show tracks */}
-          {this.state.myPlaylist.map((item, index) => {
-            return <div key={index}>
-              {item.name}
-            </div>
-          })}
+          
 
           {/* show random */}
           <p>Show the random tracks</p>

@@ -98,7 +98,7 @@ app.get('/callback', (req, res) => {
         })
           .then(response => response.json())
           .then(data => console.log('we fetch', data));
-        res.redirect('http://localhost:3000/Gamemodes/#' +
+        res.redirect('http://localhost:3000/EnterName/#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -139,7 +139,7 @@ app.get('/playlist/:id', (req, res) => {
 })
 
 const getRandomTrack = (tracks) => {
-  let randomizer = tracks[Math.floor(Math.random() * tracks.length)];
+  let randomizer = tracks[Math.floor(Math.random() *  tracks.length)];
   let track = {};
 
   track.title = randomizer.track.name;
