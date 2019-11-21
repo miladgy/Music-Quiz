@@ -273,19 +273,15 @@ io.on('connection', (socket) => {
           pgmstart = 2;
           console.log(`All the players are here: ${usernames.map(e => e.user)}`)
     }
-
   })
   
   socket.on('getinfo', () => {
     console.log('will send info')
-    // console.log(io.sockets.sockets)
-    // console.log(Object.values(io.sockets.connected))
     const socketClients = Object.values(io.sockets.connected);
     const users = socketClients.filter(socket => socket.user).map(socket => socket.user)
     console.log('number of players', Object.values(io.sockets.connected).length)
     console.log('These are the users', users);
-    socket.emit('roominfo', users)
-    // socket.broadcast.to(id).emit('roominfo', `${username} has joined to this game`);
+    // socket.emit('roominfo', users)
    io.emit('roominfo', users);
   })
 
