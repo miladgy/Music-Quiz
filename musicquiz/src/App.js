@@ -40,7 +40,7 @@ setToken = (token) => {
 
           <Switch>
             <Route path="/EnterName">
-              <EnterName setToken={this.setToken} />
+              <EnterName setToken={this.setToken} socket={socket}/>
             </Route>
             <Route path="/Gamemodes">
               <Gamemodes />
@@ -49,7 +49,7 @@ setToken = (token) => {
               <Playlists access_token={this.state.access_token} />
             </Route>
             <Route path="/Waitingroom">
-              <Waitingroom />
+              <Waitingroom socket={socket}/>
             </Route>
             <Route path='/login' component={() => { 
      window.location.href = 'http://localhost:5000/login'; 

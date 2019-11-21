@@ -245,11 +245,14 @@ let pgmstart = 0;
 let id = 0;
 
 io.on('connection', (socket) => {
-  console.log('Web socket is being connected')
+  
+
+  console.log('Web socket is being connected', socket.id)
   socket.emit('message', 'sending a message using sockets from the server' )
 
   socket.on('addClient', (username) => {
     const thePlayerName = {}
+    socket.user = username
     thePlayerName['user'] = username;
     thePlayerName['score'] = 0;
     usernames.push(thePlayerName);
@@ -271,7 +274,19 @@ io.on('connection', (socket) => {
           console.log(`All the players are here: ${usernames.map(e => e.user)}`)
     }
 
-    socket.emit('updateroom', 'SERVER', 'You are connected! Waiting for other player to connect...', id)
+  })
+  
+  socket.on('getinfo', () => {
+    console.log('will send info')
+    // console.log(io.sockets.sockets)
+    // console.log(Object.values(io.sockets.connected))
+    const socketClients = Object.values(io.sockets.connected);
+    const users = socketClients.filter(socket => socket.user).map(socket => socket.user)
+    console.log('number of players', Object.values(io.sockets.connected).length)
+    console.log('These are the users', users);
+    socket.emit('roominfo', users)
+    // socket.broadcast.to(id).emit('roominfo', `${username} has joined to this game`);
+   io.emit('roominfo', users);
   })
 
   socket.on("disconnect", () => console.log("Client disconnected"));

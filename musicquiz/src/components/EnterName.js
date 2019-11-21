@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import openSocket from 'socket.io-client';
 import { withRouter } from 'react-router';
-const socket = openSocket('http://localhost:5000');
 
 class EnterName extends Component {
     constructor(props) {
@@ -14,12 +12,14 @@ class EnterName extends Component {
     }
     submitName = (e) => {
         e.preventDefault();
-        socket.emit('addClient', e.target.elements.name.value);
+        this.props.socket.emit('addClient', e.target.elements.name.value);
         console.log(e.target.elements.name.value, 'this is the target');
         this.props.history.push('/Playlists')
     }
-    render() {
 
+    
+
+    render() {
         return (
             <Fragment>
                 <div>
