@@ -31,7 +31,9 @@ class GuessSong extends Component {
                 // const incorrectTitle3 = data[0].incorrect[2].title;
 
                 this.setState({ questions: data, finishedLoading: true })
-            });
+
+                this.props.socket.emit('questions', data)
+            })
     }
 
     getSpecificId = (id) => {
@@ -70,6 +72,10 @@ class GuessSong extends Component {
 
     componentDidMount() {
         this.getRandom();
+        this.props.socket.on('question', (data) => {
+            console.log('these are the questions being send from server socket', data)
+        })
+
     }
 
     render() {

@@ -25,10 +25,15 @@ class Waitingroom extends React.Component {
         })
         this.props.socket.emit('getinfo')
 
+        this.props.socket.on('game-started', (data) => {
+            this.props.history.push('/GuessSong');    
+        })
+
     }
     startGame = (e) => {
         e.preventDefault();
-        this.props.history.push('/GuessSong')
+        this.props.socket.emit('start-game', 'asd')
+        this.props.history.push('/GuessSong');
     }
 
     render() {
@@ -36,8 +41,16 @@ class Waitingroom extends React.Component {
             <div>
                 <p>This is the Waiting Room</p>
                 <p>List of people joined</p>
-                {this.state.users.map(user => <h4>{user}</h4>)}
-                <button onClick={this.startGame} >Start Game!</button>
+        {this.state.users.map(user => 
+        <div><h3>{user.isHost ? 'Host' : 'Player '}</h3>
+        <h4>{user.username}</h4></div>)}
+    
+        {this.state.users.find(user => {
+            console.log(user)
+        return user.isHost })? 
+        <button onClick={this.startGame} >Start Game!</button>
+        : 'Wait for the game to be started....'
+        }
 
 
             </div>

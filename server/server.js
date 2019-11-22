@@ -139,7 +139,7 @@ app.get('/playlist/:id', (req, res) => {
 })
 
 const getRandomTrack = (tracks) => {
-  let randomizer = tracks[Math.floor(Math.random() *  tracks.length)];
+  let randomizer = tracks[Math.floor(Math.random() * tracks.length)];
   let track = {};
 
   track.title = randomizer.track.name;
@@ -234,49 +234,32 @@ app.get('/refresh_token', (req, res) => {
     })
 });
 
-
 console.log('Listening on 5000');
 const server = app.listen(5000);
 const io = socket(server);
-
-let usernames = [];
-let pairCount = 0;
-let pgmstart = 0;
-let id = 0;
-
 io.on('connection', (socket) => {
-  
-
   console.log('Web socket is being connected', socket.id)
-  socket.emit('message', 'sending a message using sockets from the server' )
-
-  socket.on('addClient', (username) => {
-    const thePlayerName = {}
-    socket.user = username
-    thePlayerName['user'] = username;
-    thePlayerName['score'] = 0;
-    usernames.push(thePlayerName);
-    console.log('Adding a client with addClient', username);
-
-    pairCount++;
-    if (pairCount === 1 || pairCount >= 3) {
-      id = Math.round((Math.random() * 1000000));
-			socket.room = id;
-			pairCount = 1;
-			console.log(`Amout of players: ${pairCount} - Room Number: ${id}`);
-			socket.join(id);
-			pgmstart = 1;
+  socket.on('join-game-as-host', (username) => {
+    socket.user = {
+      username,
+      isHost: true
     }
-    if (pairCount === 2) {
-      console.log(`Amout of players: ${pairCount} - Room Number: ${id}`);
-        	socket.join(id);
-          pgmstart = 2;
-          console.log(`All the players are here: ${usernames.map(e => e.user)}`)
-    }
+    console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
+
+    // socket.on('start-game', data => {
+    //   socket.broadcast.emit('game-started', 'asd')
+    // })
   })
-  
+
+  socket.on('join-game-as-player', (username) => {
+    socket.user =  {
+      username,
+      isHost: false
+    }
+    console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
+    
+  })
   socket.on('getinfo', () => {
-    console.log('will send info')
     const socketClients = Object.values(io.sockets.connected);
     const users = socketClients.filter(socket => socket.user).map(socket => socket.user)
     console.log('number of players', Object.values(io.sockets.connected).length)

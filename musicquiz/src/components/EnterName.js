@@ -12,17 +12,18 @@ class EnterName extends Component {
     }
     submitName = (e) => {
         e.preventDefault();
-        this.props.socket.emit('addClient', e.target.elements.name.value);
-        console.log(e.target.elements.name.value, 'this is the target');
+        this.props.socket.emit('join-game-as-host', e.target.elements.name.value);
+        console.log(e.target.elements.name.value, ' is the HOST');
         this.props.history.push('/Playlists')
     }
 
-    
+
 
     render() {
         return (
             <Fragment>
                 <div>
+                    <h1>Join as a host</h1>
                     <form onSubmit={this.submitName}>
                         <input type="text" placeholder="Enter your name" name="name" />
                         <button type="submit">Submit name!</button>

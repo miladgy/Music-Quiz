@@ -4,6 +4,7 @@ import './App.css';
 import openSocket from 'socket.io-client';
 
 import EnterName from './components/EnterName'
+import Join from './components/Join'
 import Waitingroom from './components/Waitingroom'
 import Gamemodes from './components/Gamemodes'
 import Playlists from './components/Playlists'
@@ -35,9 +36,10 @@ class App extends React.Component {
       <BrowserRouter>
         <div className="App">
           <h1>Hello Quiz!</h1>
-          <Link to="/EnterName">This is Entername</Link><br />
+          <Link to="/EnterName">Join as host</Link><br />
           <Link to="/Waitingroom">waitingroom carter</Link><br />
           <Link to="/GuessSong">Guess song</Link><br />
+          <Link to="/Join">Join a game as player</Link><br />
           <Link to={!this.state.access_token ? "/login" : `/Gamemodes/#access_token=${this.state.access_token}`}>Game Modes!</Link><br />
           <Link to={this.state.access_token ? `/EnterName/#access_token=${this.state.access_token}` : "/login"}>Log in with Spotify(Host)!</Link><br />
 
@@ -48,6 +50,9 @@ class App extends React.Component {
             </Route>
             <Route path="/Gamemodes">
               <Gamemodes />
+            </Route>
+            <Route path="/Join">
+              <Join socket={socket} />
             </Route>
             <Route path="/Playlists">
               <Playlists access_token={this.state.access_token} />
