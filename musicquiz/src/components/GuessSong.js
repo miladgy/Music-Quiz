@@ -19,39 +19,49 @@ class GuessSong extends Component {
 
     getRandom = () => {
         const playlistId = '37i9dQZF1DWXfgo3OOonqa';
-        const access_token = this.props.access_token;
-
-        fetch(`http://localhost:5000/random/${playlistId}?token=${access_token}`
-        )
+        fetch(`/random/${playlistId}`)
             .then(response => response.json())
             .then(data => {
-                // const correctTitle = data[0].correct.title;
-                // const incorrectTitle1 = data[0].incorrect[0].title;
-                // const incorrectTitle2 = data[0].incorrect[1].title;
-                // const incorrectTitle3 = data[0].incorrect[2].title;
-
                 this.setState({ questions: data, finishedLoading: true })
-
                 this.props.socket.emit('questions', data)
             })
     }
 
-    getSpecificId = (id) => {
-        const access_token = window.location.hash.split('=')[1].split('&')[0];
-        fetch(`https://api.spotify.com/v1/playlists/${id}`, {
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": 'Bearer ' + access_token
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ selectedPlaylist: data.tracks.items }, () => {
-                    this.refs.audio.load();
-                })
-            });
-    }
+    // getRandom = () => {
+    //     const playlistId = '37i9dQZF1DWXfgo3OOonqa';
+    //     const access_token = this.props.access_token;
+
+    //     fetch(`http://localhost:5000/random/${playlistId}?token=${access_token}`
+    //     )
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // const correctTitle = data[0].correct.title;
+    //             // const incorrectTitle1 = data[0].incorrect[0].title;
+    //             // const incorrectTitle2 = data[0].incorrect[1].title;
+    //             // const incorrectTitle3 = data[0].incorrect[2].title;
+
+    //             this.setState({ questions: data, finishedLoading: true })
+
+    //             this.props.socket.emit('questions', data)
+    //         })
+    // }
+
+    // getSpecificId = (id) => {
+    //     const access_token = window.location.hash.split('=')[1].split('&')[0];
+    //     fetch(`https://api.spotify.com/v1/playlists/${id}`, {
+    //         headers: {
+    //             "Accept": "application/json",
+    //             "Content-Type": "application/json",
+    //             "Authorization": 'Bearer ' + access_token
+    //         }
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             this.setState({ selectedPlaylist: data.tracks.items }, () => {
+    //                 this.refs.audio.load();
+    //             })
+    //         });
+    // }
 
     addPoint = () => {
         if (this.state.round < 5) {
@@ -64,40 +74,47 @@ class GuessSong extends Component {
     incorrectAnswer = () => {
         if (this.state.round < 5) {
             this.setState((prevState) => ({ round: prevState.round + 1 }))
-        }
-        else {
+        } else {
             this.setState((prevState) => ({ round: prevState.round + 1, isGameOver: true }))
         }
     }
 
     componentDidMount() {
         this.getRandom();
-        this.props.socket.on('question', (data) => {
-            console.log('these are the questions being send from server socket', data)
-        })
 
+        this.props.socket.on('question', (data) => {
+            console.log('Socket-listener on "questions" sending questions from the server in GuessSong.js', data)
+        })
     }
 
     render() {
         return (
             <div>
-                <button onClick={this.getRandom}>Show random</button>
+                {/* <button onClick={this.getRandom}>Show random</button> */}
 
-                {this.state.playlist.map((playlist, index) => {
+                {/* {this.state.playlist.map((playlist, index) => {
                     return <div key={index} onClick={() => this.getSpecificId(playlist.id)}>{playlist.name} {playlist.id}</div>
-                })}
+                })} */}
 
                 {/* show tracks */}
 
-
                 {/* show random */}
-                <p>Show the random tracks</p>
+                <h2>Show the random tracks</h2>
                 {this.state.finishedLoading && !this.state.isGameOver
                     ? <div>
-                        <p>Round {this.state.round + 1}</p>
+                        <h3>Round {this.state.round + 1}</h3>
                         <audio className="audio" src={this.state.questions[this.state.round].correct.preview} controls type="audio/mpeg" />
-                        <p onClick={this.addPoint}>Correct: {this.state.questions[this.state.round].correct.title}</p>
-                        <p onClick={this.incorrectAnswer}>Incorrect: {this.state.questions[this.state.round].incorrect.map(e => <p>{e.title}</p>)}</p>
+
+                        <h4>Correct:</h4> 
+                        <p onClick={this.addPoint}>
+                            {this.state.questions[this.state.round].correct.title}
+                        </p>
+
+                        <h4>Incorrect:</h4>{this.state.questions[this.state.round].incorrect.map(e => 
+                            <p key={e.preview} onClick={this.incorrectAnswer}>
+                                {e.title}
+                            </p>
+                        )}
                     </div>
                     : this.state.isGameOver
                         ? <div>Your score is: {this.state.counter}</div>

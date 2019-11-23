@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.navigator{
+  display: inline-block;
+}
+
 .App-logo {
   height: 40vmin;
 }

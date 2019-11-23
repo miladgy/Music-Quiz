@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-class Gamemodes extends React.Component {
+class Gamemodes extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -33,7 +33,7 @@ class Gamemodes extends React.Component {
         )
             .then(response => response.json())
             .then(data => {
-                console.log('we fetch', data)
+                console.log('response back from fetching all tracks from specific playlist in Gamemodes.js', data)
                 this.setState({ playlist: data, finishedLoading: true })
             });
 

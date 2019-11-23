@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 
-
-class Waitingroom extends React.Component {
+class Waitingroom extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -14,9 +13,9 @@ class Waitingroom extends React.Component {
 
     componentDidMount() {
         this.props.socket.on('roominfo', (data) => {
-            console.log('This is the data from socket inside waitingroom.JS', data)
+            console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
             this.setState({
-                    users: data
+                users: data
                 // name of player
                 // number of players
                 // room id
@@ -26,10 +25,10 @@ class Waitingroom extends React.Component {
         this.props.socket.emit('getinfo')
 
         this.props.socket.on('game-started', (data) => {
-            this.props.history.push('/GuessSong');    
+            this.props.history.push('/GuessSong');
         })
-
     }
+
     startGame = (e) => {
         e.preventDefault();
         this.props.socket.emit('start-game', 'asd')
@@ -39,22 +38,30 @@ class Waitingroom extends React.Component {
     render() {
         return (
             <div>
-                <p>This is the Waiting Room</p>
-                <p>List of people joined</p>
-        {this.state.users.map(user => 
-        <div><h3>{user.isHost ? 'Host' : 'Player '}</h3>
-        <h4>{user.username}</h4></div>)}
-    
-        {this.state.users.find(user => {
-            console.log(user)
-        return user.isHost })? 
-        <button onClick={this.startGame} >Start Game!</button>
-        : 'Wait for the game to be started....'
-        }
+                <h2>This is the Waiting Room</h2>
+                <h3>List of people joined</h3>
 
+                <h4>Host:</h4>
+                {this.state.users.filter(user => user.isHost).map(user => 
+                    <p key={user.id}>
+                        {user.username}
+                    </p>
+                )}
 
+                <h4>Player(s):</h4>
+                {this.state.users.filter(user => !user.isHost).map(user =>
+                    <p key={user.id}>
+                        {user.username}
+                    </p>
+                )}
+
+                {this.state.users.find(user => this.props.socket.id === user.id)
+                    ? <button onClick={this.startGame}>Start Game!</button>
+                    : <p>Wait for the game to be started....</p>
+                }
             </div>
         )
     }
 }
+
 export default withRouter(Waitingroom);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 import './App.css';
 import openSocket from 'socket.io-client';
@@ -13,13 +13,10 @@ import GuessSong from './components/GuessSong'
 const socket = openSocket('http://localhost:5000');
 
 socket.on('message', (data) => {
-  console.log('This is the data from socket', data)
+  console.log('this is the response back on the socket-listener of "message"', data)
 })
 
-// socket.emit('addClient', 'playerMilad');
-// socket.emit('addClient', 'playerModi');
-
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -36,13 +33,14 @@ class App extends React.Component {
       <BrowserRouter>
         <div className="App">
           <h1>Hello Quiz!</h1>
-          <Link to="/EnterName">Join as host</Link><br />
-          <Link to="/Waitingroom">waitingroom carter</Link><br />
-          <Link to="/GuessSong">Guess song</Link><br />
-          <Link to="/Join">Join a game as player</Link><br />
-          <Link to={!this.state.access_token ? "/login" : `/Gamemodes/#access_token=${this.state.access_token}`}>Game Modes!</Link><br />
-          <Link to={this.state.access_token ? `/EnterName/#access_token=${this.state.access_token}` : "/login"}>Log in with Spotify(Host)!</Link><br />
-
+          <nav className="navigator">
+            <p><Link to="/EnterName">Join as host</Link></p>
+            <p><Link to="/Waitingroom">waitingroom carter</Link></p>
+            <p><Link to="/GuessSong">Guess song</Link></p>
+            <p><Link to="/Join">Join a game as player</Link></p>
+            <p><Link to={!this.state.access_token ? "/login" : `/Gamemodes/#access_token=${this.state.access_token}`}>Game Modes!</Link></p>
+            <p><Link to={this.state.access_token ? `/EnterName/#access_token=${this.state.access_token}` : "/login"}>Log in with Spotify(Host)!</Link></p>
+          </nav>
 
           <Switch>
             <Route path="/EnterName">

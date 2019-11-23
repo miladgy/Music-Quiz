@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 class Join extends Component {
     constructor(props) {
         super(props)
         this.state = {
-             
+            //Something to be populated here?s
         }
     }
 
@@ -19,12 +19,13 @@ class Join extends Component {
     render() {
         return (
             <div>
-                    <h1>Join as a player</h1>
-                    <form onSubmit={this.submitName}>
-                        <input type="text" placeholder="Enter your name" name="name" />
-                        <button type="submit">Submit name!</button>
-                    </form>
-                </div>
+                <h2>Join as a player</h2>
+                
+                <form onSubmit={this.submitName}>
+                    <input type="text" placeholder="Enter your name" name="name" />
+                    <button type="submit"> Submit name! </button>
+                </form>
+            </div>
         )
     }
 }

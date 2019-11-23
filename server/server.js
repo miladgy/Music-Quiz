@@ -1,6 +1,7 @@
 const express = require('express'); // Express web server framework
+const session = require('express-session');
 const socket = require('socket.io');
-
+const bodyParser = require('body-parser');
 const request = require('request'); // "Request" library
 const fetch = require('node-fetch');
 const cors = require('cors');
@@ -9,12 +10,14 @@ const cookieParser = require('cookie-parser');
 const Musixmatch = require('musixmatch-node');
 require('dotenv').config();
 
+const app = express();
+
 const mxm_Api = process.env.EXPRESS_MXM_API;
 const client_id = process.env.EXPRESS_API_ID;
 const client_secret = process.env.EXPRESS_API_SECRET;
 const redirect_uri = process.env.EXPRESS_REDIRECT_URI;
+const stateKey = 'spotify_auth_state';
 const mxm = new Musixmatch(mxm_Api)
-
 
 /**
  * Generates a random string containing numbers and letters
@@ -28,19 +31,28 @@ const generateRandomString = (length) => {
   for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
+
   return text;
 };
 
-const stateKey = 'spotify_auth_state';
-
-const app = express();
-
 app.use(express.static(__dirname + '/public'))
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true }))
   .use(cors())
   .use(cookieParser());
 
-app.get('/login', (req, res) => {
+// Express-Session MIDDLEWARES
+app.use(session({
+  secret: 'skjdhasdkjhvn',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false,
+    maxAge: 60000 * 10, // 10 minutes
+  }
+}))
 
+app.get('/login', (req, res) => {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -57,7 +69,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/callback', (req, res) => {
-
   // your application requests refresh and access tokens
   // after checking the state parameter
 
@@ -71,7 +82,7 @@ app.get('/callback', (req, res) => {
         error: 'state_mismatch'
       }));
   } else {
-    res.clearCookie(stateKey);
+    res.clearCookie(stateKey); // MIGHT HAVE TO BE COMMENTED/DELETED BECAUSE OF SESSION ISSUES ON FRIDAY WITH MORITZ, CARTER AND MODI
 
     fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
@@ -88,16 +99,23 @@ app.get('/callback', (req, res) => {
       .then(response => response.json())
       .then(data => {
         const { access_token, refresh_token } = data;
+        req.session.access_token = access_token
+        req.session.refresh_token = refresh_token
 
-        fetch('https://api.spotify.com/v1/playlists/37i9dQZF1DWXfgo3OOonqa', {
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": 'Bearer ' + access_token
-          }
-        })
-          .then(response => response.json())
-          .then(data => console.log('we fetch', data));
+        console.log('Getting spotify access_token and storing it in a session on "/callback"-endpoint ', req.session.access_token)
+
+        // BELOW MIGHT HAVE TO BE UNCOMMENTED // MODI
+        // fetch('https://api.spotify.com/v1/playlists/37i9dQZF1DWXfgo3OOonqa', {
+        //   headers: {
+        //     "Accept": "application/json",
+        //     "Content-Type": "application/json",
+        //     "Authorization": 'Bearer ' + access_token
+        //   }
+        // })
+        //   .then(response => response.json())
+        //   .then(data => console.log('we fetch', data));
+        // ABOVE MIGHT HAVE TO BE UNCOMMENTED, COMMENTED OUT BY MODI FRI 22/11
+
         res.redirect('http://localhost:3000/EnterName/#' +
           querystring.stringify({
             access_token: access_token,
@@ -113,8 +131,17 @@ app.get('/callback', (req, res) => {
       })
   }
 });
+
+app.get('/test', (req, res) => {
+  console.log('logging the whole session object', req.session);
+  res.send(req.session.access_token);
+})
+
 app.get('/playlist', (req, res) => {
-  const access_token = req.query.token
+  // const access_token = req.query.token
+  const access_token = req.session.access_token
+  console.log('access_token in /playlist', access_token)
+
   fetch(`https://api.spotify.com/v1/me/playlists`, {
     headers: {
       "Accept": "application/json",
@@ -124,9 +151,13 @@ app.get('/playlist', (req, res) => {
   })
     .then(response => response.json())
     .then(data => res.send(data.items))
+    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
+
 app.get('/playlist/:id', (req, res) => {
-  const access_token = req.query.token
+  // const access_token = req.query.token
+  const access_token = req.session.access_token
+
   fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
     headers: {
       "Accept": "application/json",
@@ -135,8 +166,13 @@ app.get('/playlist/:id', (req, res) => {
     }
   })
     .then(response => response.json())
-    .then(data => res.send(data.tracks.items))
+    .then(data => res.json(data.tracks.items))
+    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
+
+const hasPreviewURL = (track) => {
+  track.preview === null ? false : true;
+}
 
 const getRandomTrack = (tracks) => {
   let randomizer = tracks[Math.floor(Math.random() * tracks.length)];
@@ -145,11 +181,38 @@ const getRandomTrack = (tracks) => {
   track.title = randomizer.track.name;
   track.artist = randomizer.track.artists[0].name;
   track.preview = randomizer.track.preview_url;
+
   return track;
 }
 
+const getRandomTrackWithPreview = (tracks) => {
+  let validTrack = getRandomTrack(tracks);
+
+  while (!hasPreviewURL(validTrack)) {
+    validTrack = getRandomTrack(tracks)
+  }
+
+  return validTrack;
+}
+
+const getIncorrectTracks = (correctTrack, tracks) => {
+  const incorrect = [];
+
+  while (incorrect.length !== 3) {
+    const incorrectTrack = getRandomTrack(tracks);
+    
+    if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
+      incorrect.push(incorrectTrack);
+    }
+  }
+  
+  return incorrect;
+}
+
 app.get('/random/:id', (req, res) => {
-  const access_token = req.query.token
+  // const access_token = req.query.token
+  const access_token = req.session.access_token
+
   fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
     headers: {
       "Accept": "application/json",
@@ -158,30 +221,37 @@ app.get('/random/:id', (req, res) => {
     }
   })
     .then(response => response.json())
-    .then(data => (data.tracks.items))
+    .then(data => data.tracks.items)
     .then(tracks => {
       let arr = [];
       const numberOfQuestions = 6
 
       while (arr.length < numberOfQuestions) {
-        const correctTrack = getRandomTrack(tracks);
+        const correctTrack = getRandomTrackWithPreview(tracks);
         let questionObject = {
           correct: {},
           incorrect: []
         }
         questionObject.correct = correctTrack;
-        const incorrect = [];
-        while (incorrect.length !== 3) {
-          const incorrectTrack = getRandomTrack(tracks);
-          if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
-            incorrect.push(incorrectTrack);
-          }
-        }
+        const incorrect = getIncorrectTracks(correctTrack, tracks)
+
+        // while (incorrect.length !== 3) {
+        //   const incorrectTrack = getRandomTrack(tracks);
+        //   if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
+        //     incorrect.push(incorrectTrack);
+        //   }
+        // }
+
         questionObject.incorrect = incorrect;
-        arr.push(questionObject)
+
+        if (!arr.find(el => el.correct.artist === correctTrack.artist)) {
+          arr.push(questionObject)
+        }
       }
+
       res.send(arr);
     })
+    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
 
 app.get('/song', (req, res) => {
@@ -205,13 +275,15 @@ app.get('/song', (req, res) => {
         q_track: title,
         q_artist: artist
       })
-        .then(lyrics => res.send(lyrics.message.body.lyrics.lyrics_body))
-    }).catch(error => { console.log('something went wrong here', error) });
+      .then(lyrics => res.send(lyrics.message.body.lyrics.lyrics_body))
+    })
+    .catch(error => { console.log('something went wrong here', error) });
 })
-app.get('/refresh_token', (req, res) => {
 
+app.get('/refresh_token', (req, res) => {
   // requesting access token from refresh token
-  const refresh_token = req.query.refresh_token;
+  // const refresh_token = req.query.refresh_token;
+  const refresh_token = req.session.refresh_token
 
   fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
@@ -227,22 +299,28 @@ app.get('/refresh_token', (req, res) => {
     .then(response => response.json())
     .then(data => {
       const { refresh_token, access_token } = data
-      console.log('refresh_toooooken', refresh_token)
+
+      console.log('getting a new refresh token from endpoint "/refresh_token" ', refresh_token)
+
       res.send({
         'access_token': access_token
       });
     })
+    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now 
 });
 
 console.log('Listening on 5000');
 const server = app.listen(5000);
 const io = socket(server);
+
 io.on('connection', (socket) => {
   console.log('Web socket is being connected', socket.id)
+
   socket.on('join-game-as-host', (username) => {
     socket.user = {
       username,
-      isHost: true
+      isHost: true,
+      id: socket.id
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
@@ -252,20 +330,23 @@ io.on('connection', (socket) => {
   })
 
   socket.on('join-game-as-player', (username) => {
-    socket.user =  {
+    socket.user = {
       username,
-      isHost: false
+      isHost: false,
+      id: socket.id
     }
     console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
-    
+
   })
+
   socket.on('getinfo', () => {
     const socketClients = Object.values(io.sockets.connected);
     const users = socketClients.filter(socket => socket.user).map(socket => socket.user)
+
     console.log('number of players', Object.values(io.sockets.connected).length)
     console.log('These are the users', users);
     // socket.emit('roominfo', users)
-   io.emit('roominfo', users);
+    io.emit('roominfo', users);
   })
 
   socket.on("disconnect", () => console.log("Client disconnected"));
