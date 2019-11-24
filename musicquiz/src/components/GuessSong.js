@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {withRouter} from 'react-router'
 
 class GuessSong extends Component {
     constructor(props) {
@@ -70,17 +71,25 @@ class GuessSong extends Component {
     addPoint = () => {
         if (this.state.round < 5) {
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1 }))
-
+            this.props.socket.emit('update-score')
+            console.log('do we get in here in add point')
+            this.props.history.push('/CurrentScore');
+            console.log('HISTORY PUSH FROM 76 in GUESSONG')
         } else {
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1, isGameOver: true }))
+            // this.props.history.push('/HighScore');
+
         }
     }
 
     incorrectAnswer = () => {
         if (this.state.round < 5) {
             this.setState((prevState) => ({ round: prevState.round + 1 }))
+            this.props.socket.emit('update-score')
+            this.props.history.push('/CurrentScore');
         } else {
             this.setState((prevState) => ({ round: prevState.round + 1, isGameOver: true }))
+            // this.props.history.push('/HighScore');
         }
     }
     highlightAnswer = (preview) => {
@@ -105,11 +114,11 @@ class GuessSong extends Component {
                     this.setState({ questions: data, finishedLoading: true })
                 })
         })
-        setInterval(() => {
+        setTimeout(() => {
         this.isCorrectAnswer()
         ? this.addPoint()
         : this.incorrectAnswer() 
-        }, 2000);
+        }, 9000);
 
         // this.props.socket.on('question', data)
 
@@ -181,4 +190,4 @@ class GuessSong extends Component {
     }
 }
 
-export default GuessSong
+export default withRouter(GuessSong)

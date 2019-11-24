@@ -337,7 +337,8 @@ io.on('connection', (socket) => {
     socket.user = {
       username,
       isHost: true,
-      id: socket.id
+      id: socket.id,
+      score: 0
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
@@ -350,9 +351,10 @@ io.on('connection', (socket) => {
     socket.user = {
       username,
       isHost: false,
-      id: socket.id
+      id: socket.id,
+      score: 0
     }
-    console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
+    // console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
 
   })
 
@@ -360,14 +362,22 @@ io.on('connection', (socket) => {
     const socketClients = Object.values(io.sockets.connected);
     const users = socketClients.filter(socket => socket.user).map(socket => socket.user)
 
-    console.log('number of players', Object.values(io.sockets.connected).length)
-    console.log('These are the users', users);
+    // console.log('number of players', Object.values(io.sockets.connected).length)
+    // console.log('These are the users', users);
     // socket.emit('roominfo', users)
     io.emit('roominfo', users);
    
     socket.on('questions', (data) => {
-      console.log('gettign socket questions', data)
+      // console.log('gettign socket questions', data)
       io.emit('question', data)
+    })
+    socket.on('update-score', (data) => {
+      // console.log('LINE 375 update-score', data)
+      // console.log('socket.score on 376', socket.score)
+      // console.log('socket.score on 377', socketClients)
+      socket.user.score += 1
+      console.log('socket.score on 378', socket.user.score)
+      io.emit('score-updated', data)
     })
   })
 

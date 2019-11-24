@@ -9,6 +9,7 @@ import Waitingroom from './components/Waitingroom'
 import Gamemodes from './components/Gamemodes'
 import Playlists from './components/Playlists'
 import GuessSong from './components/GuessSong'
+import CurrentScore from './components/CurrentScore'
 
 const socket = openSocket('http://localhost:5000');
 
@@ -36,6 +37,7 @@ class App extends Component {
           <nav className="navigator">
             <p><Link to="/EnterName">Join as host</Link></p>
             <p><Link to="/Waitingroom">waitingroom carter</Link></p>
+            <p><Link to="/CurrentScore">Current score</Link></p>
             <p><Link to="/GuessSong">Guess song</Link></p>
             <p><Link to="/Join">Join a game as player</Link></p>
             <p><Link to={!this.state.access_token ? "/login" : `/Gamemodes/#access_token=${this.state.access_token}`}>Game Modes!</Link></p>
@@ -57,6 +59,9 @@ class App extends Component {
             </Route>
             <Route path="/Waitingroom">
               <Waitingroom socket={socket} />
+            </Route>
+            <Route path="/CurrentScore">
+              <CurrentScore socket={socket} />
             </Route>
             <Route path="/GuessSong">
               <GuessSong socket={socket} access_token={this.state.access_token} />
