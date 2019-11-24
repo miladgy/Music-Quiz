@@ -87,26 +87,9 @@ class GuessSong extends Component {
         this.setState({ selectedAnswer: preview })
     }
 
-    // shuffleAnswers = (correct, incorrect1, incorrect2, incorrect3) => {
-    //     const differentAnswers = [correct, incorrect1, incorrect2, incorrect3]
-
-    //         for (let i = differentAnswers.length - 1; i > 0; i--) {
-    //             const j = Math.floor(Math.random() * (i + 1));
-    //             [differentAnswers[i], differentAnswers[j]] = [differentAnswers[j], differentAnswers[i]];
-    //         }
-    //         // console.log(differentAnswers, 'looooool this are different Answers')
-    //         return differentAnswers;
-
-    // }
-
-    // shuffleAnswers = arr => {
-    //     let newArr = [...arr]
-    //     for (let i = newArr.length - 1; i > 0; i--) {
-    //         const rand = Math.floor(Math.random() * (i + 1));
-    //         [newArr[i], newArr[rand]]=[newArr[rand], newArr[i]];
-    //     }
-    //     return newArr;
-    // }
+    isCorrectAnswer = () => {
+        return this.state.selectedAnswer === this.state.questions[this.state.round].correct.preview ? true : false
+    }
 
     componentDidMount() {
         // this.getRandom();
@@ -122,6 +105,12 @@ class GuessSong extends Component {
                     this.setState({ questions: data, finishedLoading: true })
                 })
         })
+        setInterval(() => {
+        this.isCorrectAnswer()
+        ? this.addPoint()
+        : this.incorrectAnswer() 
+        }, 2000);
+
         // this.props.socket.on('question', data)
 
         // this.props.socket.on('question', (data) => {
@@ -178,7 +167,7 @@ class GuessSong extends Component {
                                     ? 'selected_answer'
                                     : ''}
                                 key={e.preview}>{e.title}</p>
-                        )} 
+                        )}
 
 
                     </div>
