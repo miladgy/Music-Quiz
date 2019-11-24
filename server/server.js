@@ -16,6 +16,7 @@ const mxm_Api = process.env.EXPRESS_MXM_API;
 const client_id = process.env.EXPRESS_API_ID;
 const client_secret = process.env.EXPRESS_API_SECRET;
 const redirect_uri = process.env.EXPRESS_REDIRECT_URI;
+const session_secret = process.env.EXPRESS_SESSION_SECRET;
 const stateKey = 'spotify_auth_state';
 const mxm = new Musixmatch(mxm_Api)
 
@@ -43,7 +44,7 @@ app.use(express.static(__dirname + '/public'))
 
 // Express-Session MIDDLEWARES
 app.use(session({
-  secret: 'skjdhasdkjhvn',
+  secret: session_secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -82,7 +83,7 @@ app.get('/callback', (req, res) => {
         error: 'state_mismatch'
       }));
   } else {
-    res.clearCookie(stateKey); // MIGHT HAVE TO BE COMMENTED/DELETED BECAUSE OF SESSION ISSUES ON FRIDAY WITH MORITZ, CARTER AND MODI
+    // res.clearCookie(stateKey); // MIGHT HAVE TO BE COMMENTED/DELETED BECAUSE OF SESSION ISSUES ON FRIDAY WITH MORITZ, CARTER AND MODI
 
     fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
@@ -171,7 +172,7 @@ app.get('/playlist/:id', (req, res) => {
 })
 
 const hasPreviewURL = (track) => {
-  track.preview === null ? false : true;
+  return track.preview === null ? false : true;
 }
 
 const getRandomTrack = (tracks) => {
@@ -187,16 +188,15 @@ const getRandomTrack = (tracks) => {
 
 const getRandomTrackWithPreview = (tracks) => {
   let validTrack = getRandomTrack(tracks);
-
   while (!hasPreviewURL(validTrack)) {
     validTrack = getRandomTrack(tracks)
   }
-
+  
   return validTrack;
 }
 
 const getIncorrectTracks = (correctTrack, tracks) => {
-  const incorrect = [];
+  let incorrect = [];
 
   while (incorrect.length !== 3) {
     const incorrectTrack = getRandomTrack(tracks);
@@ -230,32 +230,49 @@ app.get('/random/:id', (req, res) => {
         const correctTrack = getRandomTrackWithPreview(tracks);
         let questionObject = {
           correct: {},
-          incorrect: []
+          incorrect: [],
+          options: []
         }
         questionObject.correct = correctTrack;
+        // questionObject.options.push(correctTrack);
         const incorrect = getIncorrectTracks(correctTrack, tracks)
-
+        
         // while (incorrect.length !== 3) {
-        //   const incorrectTrack = getRandomTrack(tracks);
-        //   if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
-        //     incorrect.push(incorrectTrack);
-        //   }
-        // }
+          //   const incorrectTrack = getRandomTrack(tracks);
+          //   if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
+            //     incorrect.push(incorrectTrack);
+            //   }
+            // }
+            
+            questionObject.incorrect = incorrect;
+            const options = [correctTrack, ...incorrect];
+            // console.log('we are trying another on', options)
+            const shuffledOptions = shuffleAnswers(options)
+            questionObject.options = shuffledOptions;
+            // questionObject.options.flat().map(e => anotherArr.push(e));
+            
+            if (!arr.find(el => el.correct.artist === correctTrack.artist)) {
+              arr.push(questionObject)
+              }
+            }
 
-        questionObject.incorrect = incorrect;
-
-        if (!arr.find(el => el.correct.artist === correctTrack.artist)) {
-          arr.push(questionObject)
-        }
-      }
 
       res.send(arr);
     })
     .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
 
+const shuffleAnswers = arr => {
+  let newArr = [...arr]
+  for (let i = newArr.length - 1; i > 1; i--) {
+      const rand = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[rand]]=[newArr[rand], newArr[i]];
+  }
+  console.log('inside the shuffle in the server!!!!!', newArr[1])
+  return newArr;
+}
+
 app.get('/song', (req, res) => {
-  console.log('inside song')
 
   const access_token = ''
   fetch('https://api.spotify.com/v1/playlists/6Ma3ZIHYF3y9f0qs1shYe1', {
@@ -324,9 +341,9 @@ io.on('connection', (socket) => {
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
-    // socket.on('start-game', data => {
-    //   socket.broadcast.emit('game-started', 'asd')
-    // })
+    socket.on('start-game', data => {
+      socket.broadcast.emit('game-started', data)
+    })
   })
 
   socket.on('join-game-as-player', (username) => {
@@ -347,6 +364,11 @@ io.on('connection', (socket) => {
     console.log('These are the users', users);
     // socket.emit('roominfo', users)
     io.emit('roominfo', users);
+   
+    socket.on('questions', (data) => {
+      console.log('gettign socket questions', data)
+      io.emit('question', data)
+    })
   })
 
   socket.on("disconnect", () => console.log("Client disconnected"));

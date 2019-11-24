@@ -41,9 +41,7 @@ let id = 0;
   socket.join('rummet')
   // socket.emit('').to('rummet')
 
-  socket.on('questions', (data) => {
-    io.emit('question', data)
-  }
+ 
 
   socket.on('join-game-as-host', () => {
     socket.on('start-game', data => {

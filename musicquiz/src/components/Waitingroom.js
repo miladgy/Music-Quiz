@@ -24,14 +24,14 @@ class Waitingroom extends Component {
         })
         this.props.socket.emit('getinfo')
 
-        this.props.socket.on('game-started', (data) => {
+        this.props.socket.on('game-started', () => {
             this.props.history.push('/GuessSong');
         })
     }
 
     startGame = (e) => {
         e.preventDefault();
-        this.props.socket.emit('start-game', 'asd')
+        this.props.socket.emit('start-game')
         this.props.history.push('/GuessSong');
     }
 
@@ -55,7 +55,7 @@ class Waitingroom extends Component {
                     </p>
                 )}
 
-                {this.state.users.find(user => this.props.socket.id === user.id)
+                {this.state.users.find(user => this.props.socket.id === user.id && user.isHost)
                     ? <button onClick={this.startGame}>Start Game!</button>
                     : <p>Wait for the game to be started....</p>
                 }

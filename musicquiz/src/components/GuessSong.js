@@ -13,7 +13,10 @@ class GuessSong extends Component {
             counter: 0,
             round: 0,
             isGameOver: false,
-            access_token: ''
+            access_token: '',
+            users: [],
+            selectedAnswer: '',
+            differentAnswers: []
         }
     }
 
@@ -22,6 +25,7 @@ class GuessSong extends Component {
         fetch(`/random/${playlistId}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 this.setState({ questions: data, finishedLoading: true })
                 this.props.socket.emit('questions', data)
             })
@@ -66,6 +70,7 @@ class GuessSong extends Component {
     addPoint = () => {
         if (this.state.round < 5) {
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1 }))
+
         } else {
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1, isGameOver: true }))
         }
@@ -78,13 +83,50 @@ class GuessSong extends Component {
             this.setState((prevState) => ({ round: prevState.round + 1, isGameOver: true }))
         }
     }
+    highlightAnswer = (preview) => {
+        this.setState({ selectedAnswer: preview })
+    }
+
+    // shuffleAnswers = (correct, incorrect1, incorrect2, incorrect3) => {
+    //     const differentAnswers = [correct, incorrect1, incorrect2, incorrect3]
+
+    //         for (let i = differentAnswers.length - 1; i > 0; i--) {
+    //             const j = Math.floor(Math.random() * (i + 1));
+    //             [differentAnswers[i], differentAnswers[j]] = [differentAnswers[j], differentAnswers[i]];
+    //         }
+    //         // console.log(differentAnswers, 'looooool this are different Answers')
+    //         return differentAnswers;
+
+    // }
+
+    // shuffleAnswers = arr => {
+    //     let newArr = [...arr]
+    //     for (let i = newArr.length - 1; i > 0; i--) {
+    //         const rand = Math.floor(Math.random() * (i + 1));
+    //         [newArr[i], newArr[rand]]=[newArr[rand], newArr[i]];
+    //     }
+    //     return newArr;
+    // }
 
     componentDidMount() {
-        this.getRandom();
-
-        this.props.socket.on('question', (data) => {
-            console.log('Socket-listener on "questions" sending questions from the server in GuessSong.js', data)
+        // this.getRandom();
+        this.props.socket.emit('getinfo')
+        this.props.socket.on('roominfo', (data) => {
+            console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
+            this.setState({
+                users: data
+            })
+            this.state.users.find(user => this.props.socket.id === user.id && user.isHost)
+                ? this.getRandom()
+                : this.props.socket.on('question', (data) => {
+                    this.setState({ questions: data, finishedLoading: true })
+                })
         })
+        // this.props.socket.on('question', data)
+
+        // this.props.socket.on('question', (data) => {
+        //     console.log('Socket-listener on "questions" sending questions from the server in GuessSong.js', data)
+        // })
     }
 
     render() {
@@ -99,27 +141,52 @@ class GuessSong extends Component {
                 {/* show tracks */}
 
                 {/* show random */}
+                {/* onClick={this.incorrectAnswer}*/}
+                {/* onClick={this.addPoint}*/}
                 <h2>Show the random tracks</h2>
                 {this.state.finishedLoading && !this.state.isGameOver
                     ? <div>
                         <h3>Round {this.state.round + 1}</h3>
                         <audio className="audio" src={this.state.questions[this.state.round].correct.preview} controls type="audio/mpeg" />
+                        {/* {this.shuffleAnswers([this.state.questions[this.state.round].correct.title, this.state.questions[this.state.round].incorrect[0].title, this.state.questions[this.state.round].incorrect[1].title, this.state.questions[this.state.round].incorrect[2].title])
+                    .map(e => <p>{e}</p>)
+                    } */}
+                        {/* {this.shuffleAnswers(this.state.questions[this.state.round].correct.title, this.state.questions[this.state.round].incorrect[0].title, this.state.questions[this.state.round].incorrect[1].title, this.state.questions[this.state.round].incorrect[2].title)
+                    .map(e => <p>{e}</p>)
+                    } */}
 
-                        <h4>Correct:</h4> 
-                        <p onClick={this.addPoint}>
+                        {/* <p className={this.state.questions[this.state.round].correct.preview === this.state.selectedAnswer
+                            ? 'selected_answer'
+                            : ''}
+                            onClick={() => this.highlightAnswer(this.state.questions[this.state.round].correct.preview)}>
                             {this.state.questions[this.state.round].correct.title}
                         </p>
+                        
+                        {this.state.questions[this.state.round].incorrect.map(e =>
+                            <p
+                                onClick={() => this.highlightAnswer(e.preview)}
+                                className={e.preview === this.state.selectedAnswer
+                                    ? 'selected_answer'
+                                    : ''}
+                                key={e.preview}>{e.title}</p>
+                        )} */}
 
-                        <h4>Incorrect:</h4>{this.state.questions[this.state.round].incorrect.map(e => 
-                            <p key={e.preview} onClick={this.incorrectAnswer}>
-                                {e.title}
-                            </p>
-                        )}
+                        {this.state.questions[this.state.round].options.map(e =>
+                            <p
+                                onClick={() => this.highlightAnswer(e.preview)}
+                                className={e.preview === this.state.selectedAnswer
+                                    ? 'selected_answer'
+                                    : ''}
+                                key={e.preview}>{e.title}</p>
+                        )} 
+
+
                     </div>
                     : this.state.isGameOver
                         ? <div>Your score is: {this.state.counter}</div>
                         : this.state.spinner
                 }
+
             </div>
         )
     }
