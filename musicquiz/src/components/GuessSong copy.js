@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import {withRouter} from 'react-router'
 import CurrentScore from './CurrentScore'
-import DisplaySong from './DisplaySong'
-import HighScore from './HighScore'
 
 class GuessSong extends Component {
     constructor(props) {
@@ -104,10 +102,6 @@ class GuessSong extends Component {
         return this.state.selectedAnswer === this.state.questions[this.state.round].correct.preview ? true : false
     }
 
-    toggleIsPlaying = () => {
-        this.setState((prevState) => ({ isPlaying: !prevState.isPlaying }))
-    }
-
     componentDidMount() {
         // this.getRandom();
         this.props.socket.emit('getinfo')
@@ -122,61 +116,16 @@ class GuessSong extends Component {
                     this.setState({ questions: data, finishedLoading: true })
                 })
         })
-
-        //  const timer = setInterval(() => {
-        //     if (this.state.isPlaying) {
-        //         this.isCorrectAnswer()
-        //             ? this.addPoint()
-        //             : this.incorrectAnswer()
-        //         this.setState({ isPlaying: false })
-        //     } else {
-        //         this.setState({ isPlaying: true })
-        //     }
-        //     if(this.state.isGameOver) {
-        //         clearInterval(timer);
-        //     }
-        // }, 10000);
-
-        // if (this.state.round < 5) {
-        //     if (this.state.isPlaying) {
-        //         setInterval(() => {
-        //         this.isCorrectAnswer()
-        //             ? this.addPoint()
-        //             : this.incorrectAnswer()
-        //         this.setState({ isPlaying: false })
-        //         }, 5000)
-        //     } else {
-        //         setTimeout(() => {
-        //         this.setState({ isPlaying: true })
-        //         }, 2000)
-        //     }
-        // }
-
-        // const timer = setInterval(() => {
-        //     if (this.state.isPlaying) {
-        //         this.isCorrectAnswer()
-        //             ? this.addPoint()
-        //             : this.incorrectAnswer()
-        //         this.setState({ isPlaying: false })
-        //     } else {
-        //         this.setState({ isPlaying: true })
-        //     }
-        //     if(this.state.isGameOver) {
-        //         clearInterval(timer);
-        //     }
-        // }, 10000);
-
-
-        // setInterval(() => {
-        //     if (this.state.isPlaying) {
-        //         this.isCorrectAnswer()
-        //             ? this.addPoint()
-        //             : this.incorrectAnswer()
-        //         this.setState({ isPlaying: false })
-        //     } else {
-        //         this.setState({ isPlaying: true })
-        //     }
-        // }, 3000);
+        setInterval(() => {
+            if(this.state.isPlaying) {
+                this.isCorrectAnswer()
+                ? this.addPoint() 
+                : this.incorrectAnswer()
+                this.setState({isPlaying: false})
+            } else {
+                this.setState({isPlaying: true})
+            }
+        }, 8000);
 
         // this.props.socket.on('question', data)
 
@@ -187,33 +136,63 @@ class GuessSong extends Component {
 
     render() {
         return (
-
             <div>
+                {/* <button onClick={this.getRandom}>Show random</button> */}
+
+                {/* {this.state.playlist.map((playlist, index) => {
+                    return <div key={index} onClick={() => this.getSpecificId(playlist.id)}>{playlist.name} {playlist.id}</div>
+                })} */}
+
+                {/* show tracks */}
+
+                {/* show random */}
+                {/* onClick={this.incorrectAnswer}*/}
+                {/* onClick={this.addPoint}*/}
+                <h2>Show the random tracks</h2>
                 {this.state.finishedLoading && !this.state.isGameOver
+                    ? <div>
+                        <h3>Round {this.state.round + 1}</h3>
+                        <audio className="audio" src={this.state.questions[this.state.round].correct.preview} controls type="audio/mpeg" />
+                        {/* {this.shuffleAnswers([this.state.questions[this.state.round].correct.title, this.state.questions[this.state.round].incorrect[0].title, this.state.questions[this.state.round].incorrect[1].title, this.state.questions[this.state.round].incorrect[2].title])
+                    .map(e => <p>{e}</p>)
+                    } */}
+                        {/* {this.shuffleAnswers(this.state.questions[this.state.round].correct.title, this.state.questions[this.state.round].incorrect[0].title, this.state.questions[this.state.round].incorrect[1].title, this.state.questions[this.state.round].incorrect[2].title)
+                    .map(e => <p>{e}</p>)
+                    } */}
 
-                    ? this.state.isPlaying
-                        ? <DisplaySong 
-                        questions={this.state.questions} 
-                        round={this.state.round}
-                        selectedAnswer={this.state.selectedAnswer}
-                        highlightAnswer={this.highlightAnswer}
-                        isCorrectAnswer={this.isCorrectAnswer}
-                        addPoint={this.addPoint}
-                        incorrectAnswer={this.incorrectAnswer}
-                        isPlaying={this.state.isPlaying}
-                        isGameOver={this.state.isGameOver}
-                        toggleIsPlaying={this.toggleIsPlaying}
-                        />
-                        : <CurrentScore 
-                        toggleIsPlaying={this.toggleIsPlaying}
-                        socket={this.props.socket} />
+                        {/* <p className={this.state.questions[this.state.round].correct.preview === this.state.selectedAnswer
+                            ? 'selected_answer'
+                            : ''}
+                            onClick={() => this.highlightAnswer(this.state.questions[this.state.round].correct.preview)}>
+                            {this.state.questions[this.state.round].correct.title}
+                        </p>
+                        
+                        {this.state.questions[this.state.round].incorrect.map(e =>
+                            <p
+                                onClick={() => this.highlightAnswer(e.preview)}
+                                className={e.preview === this.state.selectedAnswer
+                                    ? 'selected_answer'
+                                    : ''}
+                                key={e.preview}>{e.title}</p>
+                        )} */}
 
+                        {this.state.questions[this.state.round].options.map(e =>
+                            <p
+                                onClick={() => this.highlightAnswer(e.preview)}
+                                className={e.preview === this.state.selectedAnswer
+                                    ? 'selected_answer'
+                                    : ''}
+                                key={e.preview}>{e.title}</p>
+                        )}
+
+                                {!this.state.isPlaying && <CurrentScore socket = {this.props.socket}/> }
+                        </div>
                     : this.state.isGameOver
-                    ? <HighScore 
-                    />
-                         // ? <div>Your score is: {this.state.counter}</div>
+                         ? // <CurrentScore />
+                        <div>Your score is: {this.state.counter}</div>
                         : this.state.spinner
                 }
+
             </div>
         )
     }

@@ -372,12 +372,9 @@ io.on('connection', (socket) => {
       io.emit('question', data)
     })
     socket.on('update-score', (data) => {
-      // console.log('LINE 375 update-score', data)
-      // console.log('socket.score on 376', socket.score)
-      // console.log('socket.score on 377', socketClients)
-      socket.user.score += 1
-      console.log('socket.score on 378', socket.user.score)
-      io.emit('score-updated', data)
+      socket.user.score = data
+      // io.emit('score-updated', data)
+      io.emit('roominfo', users);
     })
   })
 
