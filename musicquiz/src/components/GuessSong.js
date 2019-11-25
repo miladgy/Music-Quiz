@@ -210,6 +210,7 @@ class GuessSong extends Component {
 
                     : this.state.isGameOver
                     ? <HighScore 
+                    socket={this.props.socket}
                     />
                          // ? <div>Your score is: {this.state.counter}</div>
                         : this.state.spinner

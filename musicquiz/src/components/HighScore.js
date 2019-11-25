@@ -8,22 +8,28 @@ class HighScore extends Component {
         }
     }
 
-    // componentDidMount() {
-    //     this.props.socket.emit('getinfo')
-    //     this.props.socket.on('roominfo', (data) => {
-    //         console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
-    //         this.setState({
-    //             users: data
-    //         })
+    componentDidMount() {
+        this.props.socket.emit('getinfo')
+        this.props.socket.on('roominfo', (data) => {
+            console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
+            this.setState({
+                users: data
+            })
 
-    //     })
-    // }
+        })
+    }
+
 
 
     render() {
         return (
             <div>
-                <h2>sexy Haj(shark) scores</h2>
+                <h2>HighScore</h2>
+                <h3>{this.state.users.map(user => {
+                    return (<p>{user.username}: {user.score}</p>
+
+                    )
+                })}</h3>
 
             </div >
         )
