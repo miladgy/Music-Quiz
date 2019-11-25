@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Timer from './Timer'
 
-class DisplaySong extends Component {
+class DisplayArtist extends Component {
     constructor(props) {
         super(props)
     }
@@ -31,7 +31,7 @@ class DisplaySong extends Component {
                                 className={e.preview === this.props.selectedAnswer
                                     ? 'selected_answer'
                                     : ''}
-                                key={e.preview}>{e.title}</p>
+                                key={e.preview}>{e.artist}</p>
                         )}
                     </div>
                 }
@@ -40,4 +40,4 @@ class DisplaySong extends Component {
     }
 }
 
-export default DisplaySong;
+export default DisplayArtist;

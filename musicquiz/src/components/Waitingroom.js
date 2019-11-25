@@ -25,14 +25,14 @@ class Waitingroom extends Component {
         this.props.socket.emit('getinfo')
 
         this.props.socket.on('game-started', () => {
-            this.props.history.push('/GuessSong');
+            this.props.history.push('/GameMode');
         })
     }
 
     startGame = (e) => {
         e.preventDefault();
         this.props.socket.emit('start-game')
-        this.props.history.push('/GuessSong');
+        this.props.history.push('/GameMode');
     }
 
     render() {

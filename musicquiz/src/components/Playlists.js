@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 
 
-class Playlists extends React.Component {
+class Playlists extends Component {
     constructor(props) {
         super(props)
         this.state = {

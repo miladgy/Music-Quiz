@@ -372,8 +372,8 @@ io.on('connection', (socket) => {
       // console.log('gettign socket questions', data)
       io.emit('question', data)
     })
-    socket.on('update-score', (data) => {
-      socket.user.score = data || 0
+    socket.on('update-score', (data = 0) => {
+      socket.user.score = data
       // io.emit('score-updated', data)
       io.emit('roominfo', users);
     })

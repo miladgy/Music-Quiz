@@ -23,7 +23,7 @@ class CurrentScore extends Component {
         // })
 
         // setTimeout(() => {
-        //     // this.props.history.push('/GuessSong');
+        //     // this.props.history.push('/GameMode');
             
          
         //     }, 9000);
