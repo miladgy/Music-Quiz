@@ -373,7 +373,7 @@ io.on('connection', (socket) => {
       io.emit('question', data)
     })
     socket.on('update-score', (data) => {
-      socket.user.score = data
+      socket.user.score = data || 0
       // io.emit('score-updated', data)
       io.emit('roominfo', users);
     })

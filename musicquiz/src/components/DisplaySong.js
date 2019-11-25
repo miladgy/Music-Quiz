@@ -15,7 +15,7 @@ class DisplaySong extends Component {
                 : this.props.incorrectAnswer()
             this.props.toggleIsPlaying();
 
-        }, 20000);
+        }, 2000);
     }
 
     render() {

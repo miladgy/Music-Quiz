@@ -91,7 +91,7 @@ class GuessSong extends Component {
 
     incorrectAnswer = () => {
         if (this.state.round < 5) {
-            this.props.socket.emit('update-score', this.state.counter)
+                    this.props.socket.emit('update-score', this.state.counter)
             this.setState((prevState) => ({ round: prevState.round + 1 }))
             // this.props.history.push('/CurrentScore');
         } else {
@@ -213,7 +213,9 @@ class GuessSong extends Component {
 
                     : this.state.isGameOver
                     ? <HighScore 
+                    selectedPlaylistId={this.props.selectedPlaylistId}
                     socket={this.props.socket}
+                    questions={this.state.questions} 
                     />
                          // ? <div>Your score is: {this.state.counter}</div>
                         : this.state.spinner
