@@ -26,8 +26,11 @@ class GuessSong extends Component {
     }
 
     getRandom = () => {
-        const playlistId = '37i9dQZF1DWXfgo3OOonqa';
-        fetch(`/random/${playlistId}`)
+        const selectedPlaylist = this.props.selectedPlaylistId;
+        console.log(
+            'inside getrandom on guess song', this.props.selectedPlaylistId)
+
+        fetch(`/random/${selectedPlaylist}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data)

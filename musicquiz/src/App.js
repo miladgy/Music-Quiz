@@ -21,13 +21,18 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      access_token: ''
+      access_token: '',
+      selectedPlaylistId: ''
     }
   }
 
   setToken = (token) => {
     this.setState({ access_token: token });
   }
+
+  setSelectedPlaylist = (id) => {
+    this.setState({ selectedPlaylistId: id })
+}
 
   render() {
     return (
@@ -55,7 +60,9 @@ class App extends Component {
               <Join socket={socket} />
             </Route>
             <Route path="/Playlists">
-              <Playlists access_token={this.state.access_token} />
+              <Playlists 
+              setSelectedPlaylist={this.setSelectedPlaylist}
+              selectedPlaylistId={this.state.selectedPlaylistId} access_token={this.state.access_token} />
             </Route>
             <Route path="/Waitingroom">
               <Waitingroom socket={socket} />
@@ -64,7 +71,9 @@ class App extends Component {
               <CurrentScore socket={socket} />
             </Route>
             <Route path="/GuessSong">
-              <GuessSong socket={socket} access_token={this.state.access_token} />
+              <GuessSong 
+              selectedPlaylistId={this.state.selectedPlaylistId}
+              socket={socket} access_token={this.state.access_token} />
             </Route>
             <Route path='/login' component={() => {
               window.location.href = 'http://localhost:5000/login';

@@ -30,7 +30,7 @@ class CurrentScore extends Component {
     
             setTimeout(() => {
                     this.props.toggleIsPlaying();
-            }, 1000);
+            }, 5000);
     }
 
 

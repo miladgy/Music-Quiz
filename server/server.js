@@ -199,7 +199,7 @@ const getIncorrectTracks = (correctTrack, tracks) => {
   let incorrect = [];
 
   while (incorrect.length !== 3) {
-    const incorrectTrack = getRandomTrack(tracks);
+    const incorrectTrack = getRandomTrackWithPreview(tracks);
     
     if (!incorrect.find(el => el.artist === incorrectTrack.artist) && correctTrack.artist !== incorrectTrack.artist) {
       incorrect.push(incorrectTrack);
@@ -335,6 +335,7 @@ io.on('connection', (socket) => {
 
   socket.on('join-game-as-host', (username) => {
     socket.user = {
+
       username,
       isHost: true,
       id: socket.id,

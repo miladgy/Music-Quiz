@@ -15,7 +15,6 @@ class EnterName extends Component {
     submitName = (e) => {
         e.preventDefault();
         this.props.socket.emit('join-game-as-host', e.target.elements.name.value);
-        console.log(e.target.elements.name.value, ' is the HOST');
         this.props.history.push('/Playlists')
     }
 

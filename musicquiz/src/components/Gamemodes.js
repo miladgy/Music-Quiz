@@ -36,7 +36,6 @@ class Gamemodes extends Component {
                 console.log('response back from fetching all tracks from specific playlist in Gamemodes.js', data)
                 this.setState({ playlist: data, finishedLoading: true })
             });
-
     }
 
     render() {

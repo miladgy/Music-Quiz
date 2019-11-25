@@ -43,7 +43,7 @@ class Playlists extends React.Component {
     getSpecificPlaylistId = (id) => {
         // const access_token = this.props.access_token
         this.setState({ selectedPlaylistId: id })
-        
+        this.props.setSelectedPlaylist(id)
         // WHATS BELOW MIGHT BE OK TO DELETE
         // fetch(`http://localhost:5000/random/${id}`)
         //     .then(response => response.json())
