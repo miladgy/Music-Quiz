@@ -69,20 +69,22 @@ class Playlists extends Component {
 
     render() {
         return (
-            <div>
+            <div className="playlists">
                 {/* <button on={this.getAllPlaylists}>Show all playlists</button> */}
                 {this.state.myPlaylists.map((item, index) => {
 
-                    return <div key={index}>
+                    return <div 
+                    className="playlists__container"
+                    key={index}>
                         <p className={item.id === this.state.selectedPlaylistId
-                            ? 'selected_playlist'
-                            : ''}
+                            ? 'playlists__container__paragraph-selected paragraph playlists__container__paragraph'
+                            : 'paragraph playlists__container__paragraph'}
                             onClick={() => this.getSpecificPlaylistId(item.id)}>
                             {item.name}
                         </p>
                     </div>
                 })}
-                <button className="selected_playlist_btn"
+                <button className="btn playlists__btn"
                     type="submit"
                     onClick={this.connectToRoom}
                     style={this.state.selectedPlaylistId === ''

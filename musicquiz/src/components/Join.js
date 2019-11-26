@@ -18,12 +18,14 @@ class Join extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Join as a player</h2>
+            <div className="join">
+                <h2 className="join__header join__header__h2">Join as a player</h2>
                 
                 <form onSubmit={this.submitName}>
-                    <input type="text" placeholder="Enter your name" name="name" />
-                    <button type="submit"> Submit name! </button>
+                    <input 
+                    className="input join__input"
+                    type="text" placeholder="Enter your name" name="name" />
+                    <button className="btn join__btn" type="submit"> Submit name! </button>
                 </form>
             </div>
         )

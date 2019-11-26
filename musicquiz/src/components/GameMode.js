@@ -131,11 +131,11 @@ class GameMode extends Component {
 
     render() {
         return (
-            <div>
+            <div className="gamemode">
                 {this.state.finishedLoading && !this.state.isGameOver
 
                     ? this.state.isPlaying
-                        ? this.renderGameMode(this.state.gamemode)
+                        ? this.renderGameMode(this.state.gamemode) // could work with this.props.selectedGameMode
                         : <CurrentScore
                             toggleIsPlaying={this.toggleIsPlaying}
                             socket={this.props.socket} />

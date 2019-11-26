@@ -17,24 +17,20 @@ class DisplayArtist extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Show the random tracks</h2>
-                {
-                    <div>
+            <div className="display-artist">
+                <h2 className="display-artist__header__h2">Show the random tracks</h2>
                         <Timer />
-                        <h3>Round {this.props.round + 1}</h3>
+                        <h3 className="display-artist__header__h3">Round {this.props.round + 1}</h3>
                         <audio className="audio" src={this.props.questions[this.props.round].correct.preview} controls type="audio/mpeg" />
 
                         {this.props.questions[this.props.round].options.map(e =>
                             <p
                                 onClick={() => this.props.highlightAnswer(e.preview)}
                                 className={e.preview === this.props.selectedAnswer
-                                    ? 'selected_answer'
-                                    : ''}
+                                    ? 'display-artist__paragraph-selected display-artist__paragraph'
+                                    : 'display-artist__paragraph'}
                                 key={e.preview}>{e.artist}</p>
                         )}
-                    </div>
-                }
             </div>
         )
     }

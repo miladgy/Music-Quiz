@@ -29,13 +29,13 @@ class ChooseGameMode extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Choose your game mode</h2>
+            <div className="choose-gamemode">
+                <h2 className="choose-gamemode__header__h2">Choose your game mode</h2>
                 {this.state.gamemodes.map(gamemode =>
                     <p 
                     className={gamemode === this.props.selectedGameMode
-                    ? 'selected_gamemode'
-                    : ''}
+                    ? 'choose-gamemode__paragraph-selected paragraph choose-gamemode__paragraph'
+                    : 'paragraph choose-gamemode__paragraph'}
                     onClick={() => {
                         this.props.setSelectedGameMode(gamemode)
                     }
@@ -44,7 +44,7 @@ class ChooseGameMode extends Component {
                 )}
 
 
-                <button className="selected_gamemode_btn"
+                <button className="btn choose-gamemode__btn"
                     type="submit"
                     onClick={this.goToPlaylist}
                     style={this.props.selectedGameMode === ''

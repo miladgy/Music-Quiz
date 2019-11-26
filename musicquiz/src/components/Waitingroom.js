@@ -50,28 +50,35 @@ class Waitingroom extends Component {
 
     render() {
         return (
-            <div>
-                <h2>This is the Waiting Room</h2>
-        <h3>Mode: {this.beautifyGameMode()}</h3>
-                <h3>List of people joined</h3>
-
-                <h4>Host:</h4>
+            <div className="waiting-room">
+                <h2 className="waiting-room__header__h2">This is the Waiting Room</h2>
+        <h3 className="waiting-room__header__h3">Mode: </h3>
+        <p className="paragraph waiting-room__paragraph">{this.beautifyGameMode()}</p>
+                
+                <h3 className="waiting-room__header__h3">List of people joined</h3>
+                <h4 className="waiting-room__header__h4">Host:</h4>
                 {this.state.users.filter(user => user.isHost).map(user =>
-                    <p key={user.id}>
+                    <p 
+                    className="paragraph waiting-room__paragraph waiting-room__paragraph-host"
+                    key={user.id}>
                         {user.username}
                     </p>
                 )}
 
-                <h4>Player(s):</h4>
+                <h4 className="waiting-room__header__h4">Player(s):</h4>
                 {this.state.users.filter(user => !user.isHost).map(user =>
-                    <p key={user.id}>
+                    <p 
+                    className="paragraph waiting-room__paragraph waiting-room__paragraph-player"
+                    key={user.id}>
                         {user.username}
                     </p>
                 )}
 
                 {this.state.users.find(user => this.props.socket.id === user.id && user.isHost)
-                    ? <button onClick={this.startGame}>Start Game!</button>
-                    : <p>Wait for the game to be started....</p>
+                    ? <button 
+                    className="btn waiting-room__btn"
+                    onClick={this.startGame}>Start Game!</button>
+                    : <p className="paragraph waiting-room__paragraph waiting-room__paragraph-waiting">Wait for the game to be started....</p>
                 }
             </div>
         )

@@ -21,12 +21,14 @@ class EnterName extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Join as a host</h2>
+            <div className="enter-name">
+                <h2 className="enter-name__header enter-name__header__h2 ">Join as a host</h2>
                 
                 <form onSubmit={this.submitName}>
-                    <input type="text" placeholder="Enter your name" name="name" />
-                    <button type="submit">Submit name!</button>
+                    <input 
+                    className="input enter-name__input"
+                    type="text" placeholder="Enter your name" name="name" />
+                    <button className="btn enter-name__btn" type="submit">Submit name!</button>
                 </form>
             </div>
         )

@@ -1,14 +1,76 @@
-.App {
+.app {
+  display: grid;
+  justify-content: center;
+}
+/* Modi and Milad added following: */
+body {
+  background-color: rgb(187, 187, 187)
+}
+
+/* Alla headers */
+.app__header__h1 {
   text-align: center;
 }
 
-.navigator{
+.app__image {
+  justify-self: center;
+}
+
+.app__navigator, .enter-name, .join, 
+.choose-gamemode, .playlists, .waiting-room, 
+.display-song, .display-artist, .currentscore,
+.gamemode {
+  text-align: center;
+}
+
+.app__link {
+  background-color: rgb(148, 146, 146);
+  text-decoration: none;
+}
+
+
+
+.paragraph__gamemode {
+  color: red
+}
+
+.paragraph__playlist {
+  color: blue;
+}
+
+.paragraph__host {
+  color: gold;
+}
+.paragraph__player {
+  color: orange;
+}
+
+
+.gamemode__playground{
+  background-color: rgb(74, 73, 73)
+}
+
+
+/* End of adding greyscale styling: */
+
+
+.app__navigator{
   display: inline-block;
 }
 
-.App-logo {
-  height: 40vmin;
-}
+
+ /* $mainDark: rgb(37, 55, 94);
+ $mainMedium: rgb(77, 96, 183);
+ $mainLight: rgb(86, 171, 238);
+ $highlight: #FCD25A;
+ $primaryText: #fff;
+ $secondaryText: #eee;
+ $darkText: $mainDark;
+ $fontHuge: 32px;
+ $fontBig: 24px;
+ $fontMedium: 18px;
+ $fontSmall: 14px;
+ $fontTiny: 11px; */
 
 
 .progress-bar {
@@ -20,38 +82,66 @@
 }
 
 .filler {
-  background: #1DA598;
+  background: rgb(215, 230, 229);
   height: 100%;
   border-radius: inherit;
   transition: width .2s ease-in;
 }
 
-button {
+.btn {
   margin-right: 10px;
   padding: 7px 12px;
   font-size: 14px;
-  background: #d14836;
+  background: #433a39;
   color: white;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
   outline: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
-}
-
-.selected_playlist, .selected_gamemode, .selected_answer {
+.choose-gamemode__paragraph-selected, 
+.display-song__paragraph-selected, 
+.playlists__container__paragraph-selected {
   background-color: #a5a5a5;
 }
+
+
+/* MEDIA QUERIES ADDED TUESDAY 26 */
+
+@media only screen 
+and (max-width: 569px)  {
+  body {
+    background-color: red;
+  }
+  /* .enter-name {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1%;
+  } */
+  
+} 
+
+@media only screen 
+and (min-width: 570px) 
+and (max-width: 720px) {
+  body {
+    background-color: blue;
+  }
+} 
+
+
+@media only screen 
+and (min-width: 721px) 
+and (max-width: 1023px) {
+  body {
+    background-color: yellow;
+  }
+}
+@media only screen 
+and (min-width: 1024px) {
+  body {
+    background-color: green;
+  }
+}
+
+
+/* MEDIA QUERIES ADDED TUESDAY 26 */
