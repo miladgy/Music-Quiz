@@ -26,7 +26,6 @@ class GameMode extends Component {
 
     getRandom = () => {
         const selectedPlaylist = this.props.selectedPlaylistId;
-        console.log('inside getRandom on GameMode and get id', this.props.selectedPlaylistId)
 
         fetch(`/random/${selectedPlaylist}`)
             .then(response => response.json())

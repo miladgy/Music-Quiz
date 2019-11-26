@@ -66,6 +66,7 @@ class App extends Component {
             </Route>
             <Route path="/Playlists">
               <Playlists
+                socket={socket} 
                 setSelectedPlaylist={this.setSelectedPlaylist}
                 selectedPlaylistId={this.state.selectedPlaylistId} access_token={this.state.access_token} />
             </Route>

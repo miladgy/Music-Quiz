@@ -6,16 +6,21 @@ class HighScore extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            users: []
+            users: [],
+            playlist: ''
         }
     }
 
     componentDidMount() {
         this.props.socket.emit('getinfo')
         this.props.socket.on('roominfo', (data) => {
-            console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
-            this.setState({
-                users: data
+            this.setState(() => {
+                console.log('this is the host', data[0])
+                const host = data.find(user => user.isHost)
+                return {
+                    users: data,
+                    playlist: host.playlist
+                }
             })
         })
     }
@@ -30,7 +35,15 @@ class HighScore extends Component {
         return (
             <div>
                 <h2>HighScore</h2>
-                <h3>{this.state.users.map(user => {
+                <h3>{this.state.users.sort((a, b) => {
+                    if (a.score > b.score) {
+                        return -1
+                    }
+                    if (a.score < b.score) {
+                        return 1
+                    }
+                    return 0
+                }).map(user => {
                     return (<p>{user.username}: {user.score}</p>
                     )
                 })}</h3>
@@ -40,7 +53,7 @@ class HighScore extends Component {
                 return (<p>{question.correct.title}, by {question.correct.artist}</p>)
                 })}
                 <p>Songs were generated from the following playlist: 
-                <a href={`https://open.spotify.com/playlist/${this.props.selectedPlaylistId}`} target="_blank">Follow the playlist!</a>
+                <a href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank">Follow the playlist!</a>
                 </p>
             <Link to="/">Play again</Link>
                 

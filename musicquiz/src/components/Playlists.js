@@ -11,7 +11,7 @@ class Playlists extends Component {
             selectedPlaylistId: ''
         }
     }
-    
+
     getAllPlaylists = () => {
         fetch('/playlist')
         .then(response => response.json())
@@ -57,6 +57,7 @@ class Playlists extends Component {
     }
 
     connectToRoom = () => {
+        this.props.socket.emit('set-playlist', this.state.selectedPlaylistId)
         this.props.history.push('/Waitingroom')
     }
 

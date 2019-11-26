@@ -37,11 +37,22 @@ class Waitingroom extends Component {
         this.props.history.push('/GameMode');
     }
 
+    beautifyGameMode = () => {
+        switch (this.state.gamemode) {
+            case 'DisplayArtist':
+                return "Guess the Artist";
+            case 'DisplaySong':
+                return "Guess the Song";
+            case 'DisplayLyrics':
+                return "Guess the Lyrics";
+    }
+}
+
     render() {
         return (
             <div>
                 <h2>This is the Waiting Room</h2>
-        <h3>The Game Mode is: {this.state.gamemode}</h3>
+        <h3>Mode: {this.beautifyGameMode()}</h3>
                 <h3>List of people joined</h3>
 
                 <h4>Host:</h4>

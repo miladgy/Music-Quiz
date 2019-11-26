@@ -21,7 +21,7 @@ class ChooseGameMode extends Component {
     
     // )}
     goToPlaylist = () => {
-        this.props.socket.emit('setgamemode', this.props.selectedGameMode)
+        this.props.socket.emit('set-gamemode', this.props.selectedGameMode)
         this.props.history.push('/Playlists')
     }
 

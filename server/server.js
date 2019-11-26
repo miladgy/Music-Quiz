@@ -340,17 +340,22 @@ io.on('connection', (socket) => {
       isHost: true,
       id: socket.id,
       score: 0,
-      gamemode: ''
+      gamemode: '',
+      playlist: ''
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
     socket.on('start-game', data => {
       socket.broadcast.emit('game-started', data)
     })
-    socket.on('setgamemode', data => {
+    socket.on('set-gamemode', data => {
       socket.user.gamemode = data
-      console.log('this is the setgamemode socket', data)
+      // console.log('this is the setgamemode socket', data)
       
+    })
+    socket.on('set-playlist', data => {
+      socket.user.playlist = data
+      console.log('this is the set-playlist socket', data)
     })
   })
 
@@ -360,7 +365,8 @@ io.on('connection', (socket) => {
       isHost: false,
       id: socket.id,
       score: 0,
-      gamemode: ''
+      gamemode: '',
+      playlist: ''
     }
     // console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
 
