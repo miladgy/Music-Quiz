@@ -38,7 +38,15 @@ class CurrentScore extends Component {
         return (
             <div>
                 <h2>sexy current scores</h2>
-            <h3>{this.state.users.map(user => {
+            <h3>{this.state.users.sort((a, b) => {
+                    if (a.score > b.score) {
+                        return -1
+                    }
+                    if (a.score < b.score) {
+                        return 1
+                    }
+                    return 0
+                }).map(user => {
             return (<p>{user.username}: {user.score}</p>
                     
                     )})}</h3>
