@@ -111,7 +111,7 @@ class GameMode extends Component {
         // this.getRandom();
         this.props.socket.emit('getinfo')
         this.props.socket.on('roominfo', (data) => {
-            this.setState((prevState) => {
+            this.setState(() => {
                 console.log('this is the host', data[0])
                 const host = data.find(user => user.isHost)
                 return { users: data,

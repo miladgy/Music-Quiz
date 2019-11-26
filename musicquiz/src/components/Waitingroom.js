@@ -5,7 +5,8 @@ class Waitingroom extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            users: []
+            users: [],
+            gamemode: ''
             // WE MUST STORE GAME MODES HERE SO START GAME
             // BUTTON REALIZEZ WHAT GAME SHOULD BE STARTED
         }
@@ -14,12 +15,13 @@ class Waitingroom extends Component {
     componentDidMount() {
         this.props.socket.on('roominfo', (data) => {
             console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
-            this.setState({
-                users: data
-                // name of player
-                // number of players
-                // room id
-                // score       
+            this.setState(() => {
+                console.log('this is the host', data[0])
+                const host = data.find(user => user.isHost)
+                return {
+                    users: data,
+                    gamemode: host.gamemode
+                }
             })
         })
         this.props.socket.emit('getinfo')
@@ -39,10 +41,11 @@ class Waitingroom extends Component {
         return (
             <div>
                 <h2>This is the Waiting Room</h2>
+        <h3>The Game Mode is: {this.state.gamemode}</h3>
                 <h3>List of people joined</h3>
 
                 <h4>Host:</h4>
-                {this.state.users.filter(user => user.isHost).map(user => 
+                {this.state.users.filter(user => user.isHost).map(user =>
                     <p key={user.id}>
                         {user.username}
                     </p>

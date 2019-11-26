@@ -12,7 +12,7 @@ class DisplayArtist extends Component {
                 ? this.props.addPoint()
                 : this.props.incorrectAnswer()
             this.props.toggleIsPlaying();
-        }, 2000);
+        }, 10000);
     }
 
     render() {
