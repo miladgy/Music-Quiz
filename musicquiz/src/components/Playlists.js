@@ -11,6 +11,7 @@ class Playlists extends Component {
             selectedPlaylistId: ''
         }
     }
+    
     getAllPlaylists = () => {
         fetch('/playlist')
         .then(response => response.json())

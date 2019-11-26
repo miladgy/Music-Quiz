@@ -339,12 +339,18 @@ io.on('connection', (socket) => {
       username,
       isHost: true,
       id: socket.id,
-      score: 0
+      score: 0,
+      gamemode: ''
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
     socket.on('start-game', data => {
       socket.broadcast.emit('game-started', data)
+    })
+    socket.on('setgamemode', data => {
+      socket.user.gamemode = data
+      console.log('this is the setgamemode socket', data)
+      
     })
   })
 
@@ -353,7 +359,8 @@ io.on('connection', (socket) => {
       username,
       isHost: false,
       id: socket.id,
-      score: 0
+      score: 0,
+      gamemode: ''
     }
     // console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
 
@@ -367,6 +374,7 @@ io.on('connection', (socket) => {
     // console.log('These are the users', users);
     // socket.emit('roominfo', users)
     io.emit('roominfo', users);
+    
    
     socket.on('questions', (data) => {
       // console.log('gettign socket questions', data)

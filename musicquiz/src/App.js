@@ -11,7 +11,7 @@ import GameMode from './components/GameMode'
 import ChooseGameMode from './components/ChooseGameMode'
 import CurrentScore from './components/CurrentScore'
 
-const socket = openSocket('http://localhost:5000');
+const socket = openSocket('http://192.168.38.5:5000');
 
 socket.on('message', (data) => {
   console.log('this is the response back on the socket-listener of "message"', data)
@@ -77,12 +77,14 @@ class App extends Component {
             </Route>
             <Route path="/GameMode">
               <GameMode
+                setSelectedGameMode={this.setSelectedGameMode} 
                 selectedGameMode={this.state.selectedGameMode} 
                 selectedPlaylistId={this.state.selectedPlaylistId}
                 socket={socket} access_token={this.state.access_token} />
             </Route>
             <Route path="/ChooseGameMode">
               <ChooseGameMode
+               socket={socket}
                selectedGameMode={this.state.selectedGameMode} 
                setSelectedGameMode={this.setSelectedGameMode} 
               />

@@ -20,6 +20,7 @@ class GameMode extends Component {
             users: [],
             selectedAnswer: '',
             isPlaying: true,
+            gamemode: ''
         }
     }
 
@@ -101,7 +102,7 @@ class GameMode extends Component {
                     toggleIsPlaying={this.toggleIsPlaying}
                 />
             default:
-                return 'foo';
+                return 'crazy like a foo';
         }
     }
 
@@ -110,14 +111,22 @@ class GameMode extends Component {
         // this.getRandom();
         this.props.socket.emit('getinfo')
         this.props.socket.on('roominfo', (data) => {
-            this.setState({
-                users: data
+            this.setState((prevState) => {
+                console.log('this is the host', data[0])
+                const host = data.find(user => user.isHost)
+                return { users: data,
+                        gamemode: host.gamemode}
             })
             this.state.users.find(user => this.props.socket.id === user.id && user.isHost && this.state.round === 0)
                 ? this.getRandom()
                 : this.props.socket.on('question', (data) => {
                     this.setState({ questions: data, finishedLoading: true })
                 })
+            // this.state.users.find(user => this.props.socket.id === user.id && user.isHost && this.state.round === 0
+            // ? console.log('I am a host')
+            // : console.log('hello setting game mode here') // this.props.setSelectedGameMode()
+            // )
+            
         })
     }
 
@@ -127,7 +136,7 @@ class GameMode extends Component {
                 {this.state.finishedLoading && !this.state.isGameOver
 
                     ? this.state.isPlaying
-                        ? this.renderGameMode(this.props.selectedGameMode)
+                        ? this.renderGameMode(this.state.gamemode)
                         : <CurrentScore
                             toggleIsPlaying={this.toggleIsPlaying}
                             socket={this.props.socket} />

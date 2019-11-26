@@ -52,9 +52,6 @@ button {
   color: #09d3ac;
 }
 
-.selected_playlist {
-  background-color: #a5a5a5;
-}
-.selected_answer {
+.selected_playlist, .selected_gamemode, .selected_answer {
   background-color: #a5a5a5;
 }
