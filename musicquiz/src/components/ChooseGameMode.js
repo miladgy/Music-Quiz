@@ -11,6 +11,7 @@ class ChooseGameMode extends Component {
     }
 
     componentDidMount() {
+        this.props.setSelectedGameMode('')
 
     }
 
