@@ -21,11 +21,13 @@ class Join extends Component {
             <div className="join">
                 <h2 className="join__header join__header__h2">Join as a player</h2>
                 
-                <form onSubmit={this.submitName}>
+                <form 
+                className="join__form"
+                onSubmit={this.submitName}>
                     <input 
-                    className="input join__input"
+                    className="input join__form__input"
                     type="text" placeholder="Enter your name" name="name" />
-                    <button className="btn join__btn" type="submit"> Submit name! </button>
+                    <button className="btn join__form__btn" type="submit"> Submit name! </button>
                 </form>
             </div>
         )

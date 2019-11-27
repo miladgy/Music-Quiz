@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
+import Timer from './Timer'
 
 class CurrentScore extends Component {
     constructor(props) {
@@ -12,25 +13,15 @@ class CurrentScore extends Component {
     componentDidMount() {
         this.props.socket.emit('getinfo')
         this.props.socket.on('roominfo', (data) => {
-            // console.log('This is the data from socket-listener of "roominfo" inside waitingroom.JS', data)
             this.setState({
                 users: data
             })
 
         })
-        // this.props.socket.on('score-updated', (data) => {
-        //     // console.log('score is updated here guessScore JS', data)
-        // })
-
-        // setTimeout(() => {
-        //     // this.props.history.push('/GameMode');
-
-
-        //     }, 9000);
 
         setTimeout(() => {
             this.props.toggleIsPlaying();
-        }, 2000);
+        }, 3000);
     }
 
 
@@ -56,10 +47,9 @@ class CurrentScore extends Component {
                                 {user.score}
                             </p>
                         </div>
-
-
                     )
                 })}
+                <Timer />
             </div >
         )
     }

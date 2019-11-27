@@ -151,7 +151,15 @@ app.get('/playlist', (req, res) => {
     }
   })
     .then(response => response.json())
-    .then(data => res.send(data.items))
+    .then(data =>  {
+      const {items} = data
+      // const thumbnail = data.images[1]
+      console.log('this is items on playlist endpoint', items)
+      console.log('this is thumbnail on playlist endpoin', data)
+      res.send(items)
+    })
+      
+
     .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
 
@@ -341,7 +349,8 @@ io.on('connection', (socket) => {
       id: socket.id,
       score: 0,
       gamemode: '',
-      playlist: ''
+      playlist: '',
+      imageURL: ''
     }
     console.log('SOCKET-SERVER: ' + socket.user.isHost + ' joining as host')
 
@@ -354,8 +363,9 @@ io.on('connection', (socket) => {
       
     })
     socket.on('set-playlist', data => {
-      socket.user.playlist = data
       console.log('this is the set-playlist socket', data)
+      socket.user.playlist = data.selectedPlaylistId
+      socket.user.imageURL = data.imageURL;
     })
   })
 
@@ -366,7 +376,8 @@ io.on('connection', (socket) => {
       id: socket.id,
       score: 0,
       gamemode: '',
-      playlist: ''
+      playlist: '',
+      imageURL: ''
     }
     // console.log('SOCKET-SERVER: ' + socket.user.username + 'Joining as player')
 

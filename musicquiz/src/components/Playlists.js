@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 
-
 class Playlists extends Component {
     constructor(props) {
         super(props)
         this.state = {
             myPlaylists: [],
             access_token: '',
-            selectedPlaylistId: ''
+            selectedPlaylistId: '',
+            imageURL: ''
         }
     }
 
@@ -16,83 +16,58 @@ class Playlists extends Component {
         fetch('/playlist')
         .then(response => response.json())
         .then(data => {
-            console.table(data)
+            console.log(data)
             this.setState({ myPlaylists: data})
         })
-
-        
-        // const access_token = this.props.access_token
-        
-        // const refresh_token = window.location.hash.split('refresh_token=')[1];
-        // fetch(`http://localhost:5000/playlist?token=${access_token}`
-        //     // , {
-        //     // headers: {
-        //     //   "Accept": "application/json",
-        //     //   "Content-Type": "application/json",
-        //     //   "Authorization": 'Bearer ' + access_token
-        //     // }
-        //     // }
-        // )
-        // fetch(`http://localhost:5000/playlist`)
-        //     .then(response => response)
-        //     .then(data => {
-        //         console.log('get all playlists', data)
-        //         // this.setState({ myPlaylists: data, /* access_token: access_token */ })
-        //     })
-        //     .catch(error => console.log(error))
     }
-    getSpecificPlaylistId = (id) => {
-        // const access_token = this.props.access_token
-        this.setState({ selectedPlaylistId: id })
+    
+    getSpecificPlaylistId = (data) => {
+        const imageURL = data.images[1] ? data.images[1].url : 'https://developer.spotify.com/assets/branding-guidelines/icon1@2x.png'
+        const {id} = data
+        this.setState({ selectedPlaylistId: id, imageURL})
         this.props.setSelectedPlaylist(id)
-        // WHATS BELOW MIGHT BE OK TO DELETE
-        // fetch(`http://localhost:5000/random/${id}`)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('from random endpoint', data)
-        //     })
-        //     .catch(error => console.log(error))
-
-
     }
 
     connectToRoom = () => {
-        this.props.socket.emit('set-playlist', this.state.selectedPlaylistId)
+        this.props.socket.emit('set-playlist', {selectedPlaylistId: this.state.selectedPlaylistId, imageURL: this.state.imageURL})
         this.props.history.push('/Waitingroom')
     }
 
     componentDidMount() {
-        // const access_token = window.location.hash.split('=')[1].split('&')[0];
-        // this.props.setToken(access_token)
         this.getAllPlaylists()
     }
 
     render() {
         return (
             <div className="playlists">
-                {/* <button on={this.getAllPlaylists}>Show all playlists</button> */}
-                {this.state.myPlaylists.map((item, index) => {
+            <h2 className="playlists__header__h2">Quizzify your spotify playlists:</h2>
 
+                {this.state.myPlaylists.map((item, index) => {
+                    
                     return <div 
                     className="playlists__container"
                     key={index}>
-                        <p className={item.id === this.state.selectedPlaylistId
+                        <section className={item.id === this.state.selectedPlaylistId
                             ? 'playlists__container__paragraph-selected paragraph playlists__container__paragraph'
                             : 'paragraph playlists__container__paragraph'}
-                            onClick={() => this.getSpecificPlaylistId(item.id)}>
-                            {item.name}
-                        </p>
+                            onClick={() => this.getSpecificPlaylistId(item)}>
+                            <img 
+                            className="playlists__container__paragraph__thumbnail"
+                            src={item.images[1] ? item.images[1].url : 'https://developer.spotify.com/assets/branding-guidelines/icon1@2x.png'} />
+                            <p className="playlists__container__paragraph__playlistname">{item.name}</p>
+                        </section>
                     </div>
                 })}
                 <button className="btn playlists__btn"
                     type="submit"
                     onClick={this.connectToRoom}
                     style={this.state.selectedPlaylistId === ''
-                        ? { visibility: "hidden" }
-                        : { visibility: "visible" }}>
+                    ? { visibility: "hidden" }
+                    : { visibility: "visible" }}>
                     Next(Waiting room)
                 </button>
             </div>
+                    
         )
     }
 }

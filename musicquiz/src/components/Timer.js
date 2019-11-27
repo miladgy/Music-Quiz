@@ -20,9 +20,7 @@ class Timer extends Component {
     render() {
         return (
             <div>
-                <h2> A React Progress Bar </h2>
                 <ProgressBar percentage={this.state.percentage} />
-
             </div>
         )
     }

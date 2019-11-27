@@ -12,20 +12,23 @@ class ChooseGameMode extends Component {
 
     componentDidMount() {
         this.props.setSelectedGameMode('')
-
     }
 
-    // {this.state.gamemodes.map(gamemode =>
-    //     <p 
-        
-    //     onClick={() => this.props.setSelectedGameMode(gamemode)}>{gamemode}</p>
-    
-    // )}
     goToPlaylist = () => {
         this.props.socket.emit('set-gamemode', this.props.selectedGameMode)
         this.props.history.push('/Playlists')
     }
 
+    beautifyGameMode = (gamemode) => {
+        switch (gamemode) {
+            case 'DisplayArtist':
+                return "Guess the Artist";
+            case 'DisplaySong':
+                return "Guess the Song";
+            case 'DisplayLyrics':
+                return "Guess the Lyrics";
+    }
+}
 
     render() {
         return (
@@ -40,9 +43,8 @@ class ChooseGameMode extends Component {
                         this.props.setSelectedGameMode(gamemode)
                     }
                     
-                    }>{gamemode}</p>
+                    }>{this.beautifyGameMode(gamemode)}</p>
                 )}
-
 
                 <button className="btn choose-gamemode__btn"
                     type="submit"

@@ -7,7 +7,8 @@ class HighScore extends Component {
         super(props)
         this.state = {
             users: [],
-            playlist: ''
+            playlist: '',
+            imageURL: ''
         }
     }
 
@@ -19,7 +20,8 @@ class HighScore extends Component {
                 const host = data.find(user => user.isHost)
                 return {
                     users: data,
-                    playlist: host.playlist
+                    playlist: host.playlist,
+                    imageURL: host.imageURL
                 }
             })
         })
@@ -61,12 +63,15 @@ class HighScore extends Component {
                 <p className="high-score__summary__content__artist paragraph"> {question.correct.artist}</p>
                 </div>)
                 })}
-                <p className="high-score__summary__playlist paragraph">Songs were generated from the following playlist: 
+                <p className="high-score__summary__playlist paragraph">Songs were generated from: 
                 <a className="high-score__btn__spotify"
-                href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank">Follow the playlist!</a>
+                href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank">
+                    <img className="playlists__container__paragraph__thumbnail" src={this.state.imageURL} />
+                    <p>This Playlist!</p>
+                    </a>
                 </p>
-                </div>
             <Link className="btn high-score__btn__play-again" to="/">Play again</Link>
+                </div>
                 
 
             </div >

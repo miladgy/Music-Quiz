@@ -12,17 +12,17 @@ class DisplayArtist extends Component {
                 ? this.props.addPoint()
                 : this.props.incorrectAnswer()
             this.props.toggleIsPlaying();
-        }, 10000);
+        }, 3000);
     }
 
     render() {
         return (
             <div className="display-artist">
-                <h2 className="display-artist__header__h2">Show the random tracks</h2>
+                <h2 className="display-artist__header__h2">Who is the artist?</h2>
                         <Timer />
                         <h3 className="display-artist__header__h3">Round {this.props.round + 1}</h3>
                         <audio className="audio" src={this.props.questions[this.props.round].correct.preview} controls type="audio/mpeg" />
-
+                        <div className="display-artist__options">
                         {this.props.questions[this.props.round].options.map(e =>
                             <p
                                 onClick={() => this.props.highlightAnswer(e.preview)}
@@ -31,6 +31,7 @@ class DisplayArtist extends Component {
                                     : 'display-artist__paragraph'}
                                 key={e.preview}>{e.artist}</p>
                         )}
+                        </div>
             </div>
         )
     }

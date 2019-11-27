@@ -24,11 +24,13 @@ class EnterName extends Component {
             <div className="enter-name">
                 <h2 className="enter-name__header enter-name__header__h2 ">Join as a host</h2>
                 
-                <form onSubmit={this.submitName}>
+                <form 
+                className="enter-name__form"
+                onSubmit={this.submitName}>
                     <input 
-                    className="input enter-name__input"
+                    className="input enter-name__form__input"
                     type="text" placeholder="Enter your name" name="name" />
-                    <button className="btn enter-name__btn" type="submit">Submit name!</button>
+                    <button className="btn enter-name__form__btn" type="submit">Submit name!</button>
                 </form>
             </div>
         )
