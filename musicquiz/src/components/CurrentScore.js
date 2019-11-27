@@ -16,14 +16,12 @@ class CurrentScore extends Component {
             this.setState({
                 users: data
             })
-
         })
 
         setTimeout(() => {
             this.props.toggleIsPlaying();
         }, 3000);
     }
-
 
     render() {
         return (

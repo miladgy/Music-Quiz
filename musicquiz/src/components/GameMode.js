@@ -30,22 +30,18 @@ class GameMode extends Component {
         fetch(`/random/${selectedPlaylist}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 this.setState({ questions: data, finishedLoading: true })
                 this.props.socket.emit('questions', data)
             })
+            .catch(err => console.log(err))
     }
 
     addPoint = () => {
         if (this.state.round < 5) {
             this.props.socket.emit('update-score', this.state.counter + 1)
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1 }))
-            console.log('do we get in here in add point')
-            // this.props.history.push('/CurrentScore');
-            console.log('HISTORY PUSH FROM 76 in GUESSONG')
         } else {
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1, isGameOver: true }))
-            // this.props.history.push('/HighScore');
         }
     }
 
@@ -101,31 +97,26 @@ class GameMode extends Component {
                     toggleIsPlaying={this.toggleIsPlaying}
                 />
             default:
-                return 'crazy like a foo';
+                return 'game mode not accessible';
         }
     }
 
-
     componentDidMount() {
-        // this.getRandom();
         this.props.socket.emit('getinfo')
         this.props.socket.on('roominfo', (data) => {
             this.setState(() => {
                 console.log('this is the host', data[0])
                 const host = data.find(user => user.isHost)
-                return { users: data,
-                        gamemode: host.gamemode}
+                return {
+                    users: data,
+                    gamemode: host.gamemode
+                }
             })
             this.state.users.find(user => this.props.socket.id === user.id && user.isHost && this.state.round === 0)
                 ? this.getRandom()
                 : this.props.socket.on('question', (data) => {
                     this.setState({ questions: data, finishedLoading: true })
                 })
-            // this.state.users.find(user => this.props.socket.id === user.id && user.isHost && this.state.round === 0
-            // ? console.log('I am a host')
-            // : console.log('hello setting game mode here') // this.props.setSelectedGameMode()
-            // )
-            
         })
     }
 
@@ -135,7 +126,7 @@ class GameMode extends Component {
                 {this.state.finishedLoading && !this.state.isGameOver
 
                     ? this.state.isPlaying
-                        ? this.renderGameMode(this.state.gamemode) // could work with this.props.selectedGameMode
+                        ? this.renderGameMode(this.state.gamemode)
                         : <CurrentScore
                             toggleIsPlaying={this.toggleIsPlaying}
                             socket={this.props.socket} />

@@ -3,7 +3,6 @@ import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 import './normalize.css';
 import './App.css';
 import openSocket from 'socket.io-client';
-
 import Home from './components/Home'
 import EnterName from './components/EnterName'
 import Join from './components/Join'
@@ -39,7 +38,6 @@ class App extends Component {
 
   setSelectedGameMode = (gameMode) => {
     this.setState({ selectedGameMode: gameMode });
-
   }
 
   render() {
@@ -47,19 +45,16 @@ class App extends Component {
       <BrowserRouter>
         <div className="app">
           <h1 className="app__header app__header__h1">Quizzify</h1>
-          
-
           <Switch>
             <Route path="/EnterName">
               <EnterName setToken={this.setToken} socket={socket} />
             </Route>
-
             <Route path="/Join">
               <Join socket={socket} />
             </Route>
             <Route path="/Playlists">
               <Playlists
-                socket={socket} 
+                socket={socket}
                 setSelectedPlaylist={this.setSelectedPlaylist}
                 selectedPlaylistId={this.state.selectedPlaylistId} access_token={this.state.access_token} />
             </Route>
@@ -71,16 +66,16 @@ class App extends Component {
             </Route>
             <Route path="/GameMode">
               <GameMode
-                setSelectedGameMode={this.setSelectedGameMode} 
-                selectedGameMode={this.state.selectedGameMode} 
+                setSelectedGameMode={this.setSelectedGameMode}
+                selectedGameMode={this.state.selectedGameMode}
                 selectedPlaylistId={this.state.selectedPlaylistId}
                 socket={socket} access_token={this.state.access_token} />
             </Route>
             <Route path="/ChooseGameMode">
               <ChooseGameMode
-               socket={socket}
-               selectedGameMode={this.state.selectedGameMode} 
-               setSelectedGameMode={this.setSelectedGameMode} 
+                socket={socket}
+                selectedGameMode={this.state.selectedGameMode}
+                setSelectedGameMode={this.setSelectedGameMode}
               />
             </Route>
             <Route path='/login' component={() => {

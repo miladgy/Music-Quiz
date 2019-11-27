@@ -5,9 +5,7 @@ class Timer extends Component {
         super(props)
         this.state = {
             percentage: 100
-
         }
-        // this.nextStep = this.nextStep.bind(this)
     }
 
     componentDidMount() {
