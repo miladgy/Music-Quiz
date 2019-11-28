@@ -16,7 +16,7 @@ class Join extends Component {
     render() {
         return (
             <div className="join">
-                <h2 className="join__header join__header__h2">Join as a player</h2>
+                <h2 className="join__header join__header__h2 header__tag">Join as a player</h2>
 
                 <form
                     className="join__form"
@@ -26,6 +26,7 @@ class Join extends Component {
                         type="text" placeholder="Enter your name" name="name" />
                     <button className="btn join__form__btn" type="submit"> Submit name! </button>
                 </form>
+                <button onClick={() => this.props.history.goBack()} className="btn enter-name__form__btn-back" type="button">← BACK</button>
             </div>
         )
     }

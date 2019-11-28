@@ -310,6 +310,23 @@ io.on('connection', (socket) => {
       io.emit('roominfo', users);
     })
   })
-
-  socket.on("disconnect", () => console.log("Client disconnected"));
-})
+// socket.on("kickEmOut", () => {
+//   const socketClients = Object.values(io.sockets.connected);
+//   const users = socketClients.filter(socket => socket.user).forEach(socket => socket.user = {
+//     username: '',
+//     isHost: false,
+//     id: socket.id,
+//     score: 0,
+//     gamemode: '',
+//     playlist: '',
+//     imageURL: ''
+//   })
+//   // users.splice(0, users.length)
+// })
+  socket.on("disconnect", () => {
+    // socketClients.forEach(clients => delete clients);
+    
+    
+    console.log("Client disconnected")});
+  })
+// })

@@ -22,7 +22,7 @@ class EnterName extends Component {
     render() {
         return (
             <div className="enter-name">
-                <h2 className="enter-name__header enter-name__header__h2 ">Join as a host</h2>
+                <h2 className="enter-name__header enter-name__header__h2 header__tag">Join as a host</h2>
 
                 <form
                     className="enter-name__form"
@@ -30,8 +30,9 @@ class EnterName extends Component {
                     <input
                         className="input enter-name__form__input"
                         type="text" placeholder="Enter your name" name="name" />
-                    <button className="btn enter-name__form__btn" type="submit">Submit name!</button>
+                    <button className="btn enter-name__form__btn" type="submit">SUBMIT</button>
                 </form>
+                    <button onClick={() => this.props.history.push('/')} className="btn enter-name__form__btn-back" type="button">← BACK</button>
             </div>
         )
     }

@@ -41,7 +41,7 @@ class Playlists extends Component {
     render() {
         return (
             <div className="playlists">
-                <h2 className="playlists__header__h2">Quizzify your spotify playlists:</h2>
+                <h2 className="playlists__header__h2 header__tag">Quizzify your spotify playlists:</h2>
 
                 {this.state.myPlaylists.map((item, index) => {
 
@@ -59,13 +59,15 @@ class Playlists extends Component {
                         </section>
                     </div>
                 })}
+                <button onClick={() => this.props.history.goBack()} className="btn enter-name__form__btn-back" type="button">← BACK</button>
+
                 <button className="btn playlists__btn"
                     type="submit"
                     onClick={this.connectToRoom}
                     style={this.state.selectedPlaylistId === ''
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }}>
-                    Next(Waiting room)
+                    Next
                 </button>
             </div>
 

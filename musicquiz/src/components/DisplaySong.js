@@ -19,9 +19,9 @@ class DisplaySong extends Component {
     render() {
         return (
             <div className="display-song">
-                <h2 className="display-song__header__h2">What song is playing?</h2>
+                <h2 className="display-song__header__h2 header__tag">What song is playing?</h2>
                 <Timer />
-                <h3 className="display-song__header__h3">Round {this.props.round + 1}</h3>
+                <h3 className="display-song__header__h3 header__tag">Round {this.props.round + 1}</h3>
                 <audio className="audio" src={this.props.questions[this.props.round].correct.preview} controls type="audio/mpeg" />
                 <div className="display-song__options">
                     {this.props.questions[this.props.round].options.map(e =>

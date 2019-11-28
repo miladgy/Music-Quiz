@@ -26,10 +26,15 @@ class HighScore extends Component {
         })
     }
 
+    // kickEmOut = () => {
+    //     this.props.socket.emit('kickEmOut')
+    //     // setTimeout(() => this.props.socket.destroy(), 0)
+    // }
+
     render() {
         return (
             <div className="high-score">
-                <h2 className="high-score__header__h2">HighScore</h2>
+                <h2 className="high-score__header__h2 header__tag">HighScore</h2>
                 {this.state.users.sort((a, b) => {
                     if (a.score > b.score) {
                         return -1
@@ -48,7 +53,7 @@ class HighScore extends Component {
                 })}
 
                 <div className="high-score__summary">
-                    <h2 className="high-score__summary__header__h2">Title and Artist</h2>
+                    <h2 className="high-score__summary__header__h2 header__tag">Title and Artist</h2>
                     {this.props.questions.map(question => {
                         return (
                             <div className="high-score__summary__content">

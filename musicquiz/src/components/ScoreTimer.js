@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Timer extends Component {
+class ScoreTimer extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -11,7 +11,7 @@ class Timer extends Component {
     componentDidMount() {
         setInterval(() => {
             if (this.state.percentage === 0) return
-            this.setState(prevState => ({ percentage: prevState.percentage - 0.125 }))
+            this.setState(prevState => ({ percentage: prevState.percentage - 0.25 }))
         }, 25);
     }
 
@@ -36,4 +36,4 @@ const Filler = (props) => {
     return <div className="filler" style={{ width: `${props.percentage}%` }} />
 }
 
-export default Timer
+export default ScoreTimer

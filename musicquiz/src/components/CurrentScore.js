@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import Timer from './Timer'
+import ScoreTimer from './ScoreTimer'
 
 class CurrentScore extends Component {
     constructor(props) {
@@ -20,13 +20,13 @@ class CurrentScore extends Component {
 
         setTimeout(() => {
             this.props.toggleIsPlaying();
-        }, 3000);
+        }, 10000);
     }
 
     render() {
         return (
             <div className="current-score">
-                <h2 className="current-score__header__h2">Current scores</h2>
+                <h2 className="current-score__header__h2 header__tag">Current scores</h2>
                 {this.state.users.sort((a, b) => {
                     if (a.score > b.score) {
                         return -1
@@ -47,7 +47,7 @@ class CurrentScore extends Component {
                         </div>
                     )
                 })}
-                <Timer />
+                <ScoreTimer />
             </div >
         )
     }

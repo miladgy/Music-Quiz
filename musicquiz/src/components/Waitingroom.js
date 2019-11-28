@@ -46,12 +46,12 @@ class Waitingroom extends Component {
     render() {
         return (
             <div className="waiting-room">
-                <h2 className="waiting-room__header__h2">This is the Waiting Room</h2>
-                <h3 className="waiting-room__header__h3">Mode: </h3>
+                <h2 className="waiting-room__header__h2 header__tag">Lobby</h2>
+                <h3 className="waiting-room__header__h3 header__tag">Mode: </h3>
                 <p className="paragraph waiting-room__paragraph">{this.beautifyGameMode()}</p>
 
-                <h3 className="waiting-room__header__h3">List of people joined</h3>
-                <h4 className="waiting-room__header__h4">Host:</h4>
+                <h3 className="waiting-room__header__h3 header__tag">List of people joined</h3>
+                <h4 className="waiting-room__header__h4 header__tag">Host:</h4>
                 {this.state.users.filter(user => user.isHost).map(user =>
                     <p
                         className="paragraph waiting-room__paragraph waiting-room__paragraph-host"
@@ -60,7 +60,7 @@ class Waitingroom extends Component {
                     </p>
                 )}
 
-                <h4 className="waiting-room__header__h4">Player(s):</h4>
+                <h4 className="waiting-room__header__h4 header__tag">Player(s):</h4>
                 {this.state.users.filter(user => !user.isHost).map(user =>
                     <p
                         className="paragraph waiting-room__paragraph waiting-room__paragraph-player"

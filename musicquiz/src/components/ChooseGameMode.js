@@ -27,33 +27,35 @@ class ChooseGameMode extends Component {
                 return "Guess the Song";
             case 'DisplayLyrics':
                 return "Guess the Lyrics";
+        }
     }
-}
 
     render() {
         return (
             <div className="choose-gamemode">
-                <h2 className="choose-gamemode__header__h2">Choose your game mode</h2>
+                <h2 className="choose-gamemode__header__h2 header__tag">Choose your game mode</h2>
                 {this.state.gamemodes.map(gamemode =>
-                    <p 
-                    className={gamemode === this.props.selectedGameMode
-                    ? 'choose-gamemode__paragraph-selected paragraph choose-gamemode__paragraph'
-                    : 'paragraph choose-gamemode__paragraph'}
-                    onClick={() => {
-                        this.props.setSelectedGameMode(gamemode)
-                    }
-                    
-                    }>{this.beautifyGameMode(gamemode)}</p>
+                    <p
+                        className={gamemode === this.props.selectedGameMode
+                            ? 'choose-gamemode__paragraph-selected paragraph choose-gamemode__paragraph'
+                            : 'paragraph choose-gamemode__paragraph'}
+                        onClick={() => {
+                            this.props.setSelectedGameMode(gamemode)
+                        }
+
+                        }>{this.beautifyGameMode(gamemode)}</p>
                 )}
 
+                <button onClick={() => this.props.history.goBack()} className="btn enter-name__form__btn-back" type="button">← BACK</button>
                 <button className="btn choose-gamemode__btn"
                     type="submit"
                     onClick={this.goToPlaylist}
                     style={this.props.selectedGameMode === ''
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }}>
-                    Next(Choose your playlist)
+                    Next
                 </button>
+
             </div >
         )
     }

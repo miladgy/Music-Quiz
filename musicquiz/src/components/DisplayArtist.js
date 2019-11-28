@@ -12,15 +12,15 @@ class DisplayArtist extends Component {
                 ? this.props.addPoint()
                 : this.props.incorrectAnswer()
             this.props.toggleIsPlaying();
-        }, 3000);
+        }, 20000);
     }
 
     render() {
         return (
             <div className="display-artist">
-                <h2 className="display-artist__header__h2">Who is the artist?</h2>
+                <h2 className="display-artist__header__h2 header__tag">Who is the artist?</h2>
                 <Timer />
-                <h3 className="display-artist__header__h3">Round {this.props.round + 1}</h3>
+                <h3 className="display-artist__header__h3 header__tag">Round {this.props.round + 1}</h3>
                 <audio className="audio" src={this.props.questions[this.props.round].correct.preview} controls type="audio/mpeg" />
                 <div className="display-artist__options">
                     {this.props.questions[this.props.round].options.map(e =>
