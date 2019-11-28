@@ -41,6 +41,7 @@ class GameMode extends Component {
             this.props.socket.emit('update-score', this.state.counter + 1)
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1 }))
         } else {
+            this.props.socket.emit('update-score', this.state.counter + 1)
             this.setState((prevState) => ({ counter: prevState.counter + 1, round: prevState.round + 1, isGameOver: true }))
         }
     }
