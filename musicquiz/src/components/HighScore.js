@@ -62,13 +62,13 @@ class HighScore extends Component {
                             </div>)
                     })}
                     <p className="high-score__summary__playlist paragraph">Songs were generated from:
+                    </p>
                 <a className="high-score__btn__spotify"
                             href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank">
                             <img className="playlists__container__paragraph__thumbnail" src={this.state.imageURL} />
-                            <p>This Playlist!</p>
+                            <p className="high-score__btn__spotify__paragraph paragraph">This Playlist!</p>
                         </a>
-                    </p>
-                    <Link className="btn high-score__btn__play-again" to="/">Play again</Link>
+                    <Link className="btn high-score__btn__play-again" to="/">PLAY AGAIN</Link>
                 </div>
             </div >
         )

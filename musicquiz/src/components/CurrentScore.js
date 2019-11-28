@@ -47,6 +47,9 @@ class CurrentScore extends Component {
                         </div>
                     )
                 })}
+                            <p className="current-score__user__get-ready paragraph header__tag">
+                                Get ready for the next round...
+                            </p>
                 <ScoreTimer />
             </div >
         )

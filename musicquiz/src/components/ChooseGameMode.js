@@ -53,7 +53,7 @@ class ChooseGameMode extends Component {
                     style={this.props.selectedGameMode === ''
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }}>
-                    Next
+                    CONTINUE
                 </button>
 
             </div >

@@ -9,13 +9,18 @@ body {
   background: url('./img/background.png') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
+  min-height: 100vh;
+  letter-spacing: 1px;
+  font-size: 1.2rem;
 }
+
+
 
 .app {
   display: grid;
   justify-content: center;
   margin: 2% auto;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   /* padding-bottom: 200px; */
   width: 80vw;
@@ -23,8 +28,6 @@ body {
   padding-bottom: 30px;
 }
 /* Modi and Milad added following: */
-
-
 
 /* Alla headers */
 .app__header__h1 {
@@ -34,16 +37,19 @@ body {
   font-size: 2rem;
   opacity: 1;
   stroke: 1px aqua ;
-}
- 
   
+}
 
+.app__header__tag{
+text-decoration: none;
+}
 .header__tag {
   color: white;
-  /* text-shadow:
-  1px -1px 0 Black,
-  -1px 1px 0 Black,
-  1px 1px 0 Black; */
+}
+
+.high-score__summary__playlist {
+  color: white;
+  padding-bottom: 1%;
 }
 
 
@@ -52,25 +58,25 @@ body {
 }
 /* .display-song, .display-artist, */
 .enter-name, .join, 
-.choose-gamemode, .playlists, .waiting-room, 
-.currentscore, .gamemode{
+.choose-gamemode, .waiting-room, 
+.currentscore, .gamemode {
   /* background-color: rgba(228, 230, 229, 0.2); */
   border: 1px solid #30ba60;
-   /* background-color: rgba(255, 255, 255, 0.8); */
+  /* background-color: rgba(255, 255, 255, 0.8); */
   /* color: #edbb25; */
   color: orange;
   padding: 5%;
   width: 16rem;
-
+  
   /* color: #30ba60; */
   letter-spacing: 1.5px;
   border-radius: 5px;
-
+  
 }
 
 .display-song, .display-artist{
   /*used to have text-align: center */
-  color: red;
+  color: white;
 }
 
 .app__navigator, .enter-name, .join, 
@@ -88,7 +94,8 @@ body {
 .current-score__user {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-/* grid-template-rows: repeat(3, auto); */
+  border-bottom: 1px solid #30ba60;
+  /* grid-template-rows: repeat(3, auto); */
 }
 
 /* .high-score {
@@ -96,39 +103,48 @@ body {
 } */
 
 .high-score__user {
-  background-color: rgba(237, 187, 37, 0.5);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  border-bottom: 1px solid #30ba60;
 }
+
 .high-score__summary {
   display: grid;
-  background-color: rgba(48, 186, 96, 0.5);
 }
 .high-score__summary__content {
   display: grid;
-  background-color: rgba(48, 186, 96, 0.5);
+  border-bottom: 1px solid #30ba60;
   grid-template-columns: 2fr 1fr;
   align-items: center;
+  
+}
 
-}
-.app__link {
-  text-decoration: none;
+.high-score__btn__play-again {
   color: white;
-  letter-spacing: 1px;
 }
+
 
 .playlists__container__paragraph__thumbnail {
   width: 30%;
   height: 30%;
 }
 
+.high-score__btn__spotify {
+  color: #30ba60;
+  outline: none;
+  text-decoration: none;
+}
+
+
 .btn{
   border-radius: 7px;
   background-color: rgba(19,76,130,1);
+  /* color: white; */
   border: 1px solid rgba(42,32,99,1);
   padding: 10px;
   cursor: pointer;
   outline: none;
+  text-decoration: none;
   margin: 3%;
 }
 
@@ -138,7 +154,23 @@ body {
   cursor: pointer;
   color: black;
 }
+.app__link {
+  text-decoration: none;
+  color: white;
+  letter-spacing: 1px;
+}
+.app__link__join__player:hover, .app__link__join__host:hover {
+  color:black
+}
 
+.enter-name__form__btn-back {
+  background-color: #edbb25;
+  color: black;
+}
+.enter-name__form__btn-back:hover {
+  background-color: #134c82;
+  color: white;
+}
 
 .paragraph__gamemode {
   color: red
@@ -173,21 +205,46 @@ body {
   border-radius: 5px;
   cursor: pointer;
   border: 1px solid #134c82;
+  padding: 2px;
+} 
+/*  
+.display-song__paragraph:hover, .display-artist__paragraph:hover {
+  background-color: rgba(42,32,99,1);
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #134c82;
+} */
+
+.choose-gamemode__paragraph-selected {
+  background-color: rgba(19,76,130,1);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #2a2063;
 }
+
 
 .choose-gamemode__paragraph, .playlists__container__paragraph, .playlists__container__paragraph__thumbnail {
   cursor: pointer;
 }
 
-.choose-gamemode__paragraph-selected, 
+
+/* LEFT TO FIX */
 .display-song__paragraph-selected,
-.display-artist__paragraph-selected, 
-.playlists__container__paragraph-selected {
+.display-artist__paragraph-selected {
   background-color: rgba(19,76,130,1);
+  color: #edbb25;
   border-radius: 5px;
   cursor: pointer;
   border: 1px solid #2a2063;
   /* box-shadow: 0 0 5px #30ba60; */
+}
+
+.playlists__container__paragraph-selected {
+  background-color: rgba(48,186,96,0.1);
+  border-radius: 50px;
+  cursor: pointer;
+
 }
 
 
@@ -204,7 +261,14 @@ body {
 
 .playlists {
   display: grid;
-  grid-template-columns: repeat(2, 1fr)
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid #30ba60;
+  color: orange;
+  padding: 5%;
+  width: 80%;
+  margin: 0 auto;
+  letter-spacing: 1.5px;
+  border-radius: 5px;
 }
 
 .playlists__header__h2 {
@@ -222,17 +286,17 @@ body {
 
 }
 .enter-name__form__input::placeholder, .join__form__input::placeholder {
-  color:#2a2063;
+  color:#969595;
   text-align: center;
 }
 
 .display-artist__options{
   display: grid;
-  gap: 1% 
+  gap: 1%;
 }
 .display-song__options{
   display: grid;
-  gap: 1% 
+  gap: 1%;
 }
 
 
@@ -256,7 +320,7 @@ and (max-width: 569px)  {
 
 @media only screen 
 and (min-width: 570px) 
-and (max-width: 720px) {
+{
   .display-artist__options{
     grid-template-columns: repeat(2, 1fr);
   }
@@ -264,23 +328,6 @@ and (max-width: 720px) {
     grid-template-columns: repeat(2, 1fr);
   }
 } 
-
-/*
-@media only screen 
-and (min-width: 721px) 
-and (max-width: 1023px) {
-  body {
-  }
-}
-@media only screen 
-and (min-width: 1024px) {
-  body {
-  }
-} */
-
-
-/* MEDIA QUERIES ADDED TUESDAY 26 */
-
 
 /* FILLER TIMER */
 

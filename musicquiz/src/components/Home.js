@@ -12,11 +12,12 @@ class Home extends React.Component {
                 <nav className="app__navigator">
                     <button className="app__link app__link__join__player btn"><Link
                         className="app__link"
-                        to="/Join"><span>Join a game as player</span></Link></button>
+                        to="/Join">JOIN AS PLAYER</Link></button>
                     <button className="app__link app__link__join__host btn"><Link
                         className="app__link"
-                        to="/login"><span>Log in with Spotify(Host)!</span></Link></button>
+                        to="/login">JOIN AS HOST (WITH SPOTIFY)</Link></button>
                 </nav>
+                <p>Read more</p>
             </div>
         )
     }

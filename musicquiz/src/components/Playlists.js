@@ -67,7 +67,7 @@ class Playlists extends Component {
                     style={this.state.selectedPlaylistId === ''
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }}>
-                    Next
+                    CONTINUE
                 </button>
             </div>
 

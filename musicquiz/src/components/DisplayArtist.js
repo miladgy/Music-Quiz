@@ -7,6 +7,7 @@ class DisplayArtist extends Component {
     }
 
     componentDidMount() {
+        this.props.highlightAnswer('')
         setTimeout(() => {
             this.props.isCorrectAnswer()
                 ? this.props.addPoint()

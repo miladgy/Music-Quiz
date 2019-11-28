@@ -44,7 +44,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="app">
-          <h1 className="app__header app__header__h1 header__tag">Quizzify</h1>
+          <Link className="app__header__tag" to="/"><h1 className="app__header app__header__h1 header__tag">Quizzify</h1></Link>
           <Switch>
             <Route path="/EnterName">
               <EnterName setToken={this.setToken} socket={socket} />
