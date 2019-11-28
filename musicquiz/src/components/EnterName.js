@@ -29,7 +29,7 @@ class EnterName extends Component {
                     onSubmit={this.submitName}>
                     <input
                         className="input enter-name__form__input"
-                        type="text" placeholder="Enter your name" name="name" />
+                        type="text" placeholder="Enter your name" name="name" required />
                     <button className="btn enter-name__form__btn" type="submit">SUBMIT</button>
                 </form>
                     <button onClick={() => this.props.history.push('/')} className="btn enter-name__form__btn-back" type="button">← BACK</button>

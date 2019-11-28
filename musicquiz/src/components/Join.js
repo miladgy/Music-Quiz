@@ -23,7 +23,7 @@ class Join extends Component {
                     onSubmit={this.submitName}>
                     <input
                         className="input join__form__input"
-                        type="text" placeholder="Enter your name" name="name" />
+                        type="text" placeholder="Enter your name" name="name"  required/>
                     <button className="btn join__form__btn" type="submit">SUBMIT</button>
                 </form>
                 <button onClick={() => this.props.history.goBack()} className="btn enter-name__form__btn-back" type="button">← BACK</button>

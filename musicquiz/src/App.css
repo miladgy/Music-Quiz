@@ -207,6 +207,7 @@ text-decoration: none;
   border: 1px solid #134c82;
   padding: 2px;
 } 
+
 /*  
 .display-song__paragraph:hover, .display-artist__paragraph:hover {
   background-color: rgba(42,32,99,1);
@@ -227,8 +228,13 @@ text-decoration: none;
 .choose-gamemode__paragraph, .playlists__container__paragraph, .playlists__container__paragraph__thumbnail {
   cursor: pointer;
 }
+.display-artist__paragraph, .display-artist__paragraph {
 
-
+  display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* LEFT TO FIX */
 .display-song__paragraph-selected,
 .display-artist__paragraph-selected {
@@ -237,6 +243,7 @@ text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
   border: 1px solid #2a2063;
+  
   /* box-shadow: 0 0 5px #30ba60; */
 }
 
@@ -291,12 +298,14 @@ text-decoration: none;
 }
 
 .display-artist__options{
-  display: grid;
+  /* display: grid;
   gap: 1%;
+   */
+ 
 }
 .display-song__options{
-  display: grid;
-  gap: 1%;
+  /* display: grid;
+  gap: 1%; */
 }
 
 
