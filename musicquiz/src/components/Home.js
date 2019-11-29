@@ -17,7 +17,6 @@ class Home extends React.Component {
                         className="app__link"
                         to="/login">JOIN AS HOST (WITH SPOTIFY)</Link></button>
                 </nav>
-                <p>Read more</p>
             </div>
         )
     }
