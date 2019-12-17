@@ -5,6 +5,8 @@ import DisplaySong from './DisplaySong'
 import DisplayArtist from './DisplayArtist'
 import HighScore from './HighScore'
 
+console.log('test')
+
 class GameMode extends Component {
     constructor(props) {
         super(props)
