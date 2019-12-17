@@ -12,7 +12,7 @@ import GameMode from './components/GameMode'
 import ChooseGameMode from './components/ChooseGameMode'
 import CurrentScore from './components/CurrentScore'
 
-const socket = openSocket('http://192.168.38.5:5000');
+const socket = openSocket('http://192.168.35.127:5000');
 
 socket.on('message', (data) => {
   console.log('this is the response back on the socket-listener of "message"', data)

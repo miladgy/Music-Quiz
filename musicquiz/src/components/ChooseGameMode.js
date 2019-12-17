@@ -57,8 +57,7 @@ class ChooseGameMode extends Component {
                         : { visibility: "visible" }}>
                     CONTINUE
                 </button>
-
-            </div >
+            </div>
         )
     }
 }

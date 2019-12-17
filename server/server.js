@@ -166,6 +166,15 @@ const getIncorrectTracks = (correctTrack, tracks) => {
   return incorrect;
 }
 
+const shuffleAnswers = arr => {
+  let newArr = [...arr]
+  for (let i = newArr.length - 1; i > 1; i--) {
+    const rand = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
+  }
+  return newArr;
+}
+
 app.get('/random/:id', (req, res) => {
   const access_token = req.session.access_token
   fetch(`https://api.spotify.com/v1/playlists/${req.params.id}`, {
@@ -182,12 +191,12 @@ app.get('/random/:id', (req, res) => {
       const numberOfQuestions = 6
 
       while (arr.length < numberOfQuestions) {
-        const correctTrack = getRandomTrackWithPreview(tracks);
         let questionObject = {
           correct: {},
           incorrect: [],
           options: []
         }
+        const correctTrack = getRandomTrackWithPreview(tracks);
         questionObject.correct = correctTrack;
         const incorrect = getIncorrectTracks(correctTrack, tracks)
         questionObject.incorrect = incorrect;
@@ -203,14 +212,7 @@ app.get('/random/:id', (req, res) => {
     .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 })
 
-const shuffleAnswers = arr => {
-  let newArr = [...arr]
-  for (let i = newArr.length - 1; i > 1; i--) {
-    const rand = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
-  }
-  return newArr;
-}
+
 
 app.get('/song', (req, res) => {
   const access_token = req.session.access_token
