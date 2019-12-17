@@ -54,7 +54,9 @@ class Playlists extends Component {
                             onClick={() => this.getSpecificPlaylistId(item)}>
                             <img
                                 className="playlists__container__paragraph__thumbnail"
-                                src={item.images[1] ? item.images[1].url : 'https://developer.spotify.com/assets/branding-guidelines/icon1@2x.png'} />
+                                src={item.images[1] ? item.images[1].url : 'https://developer.spotify.com/assets/branding-guidelines/icon1@2x.png'}
+                                alt="a thumbnail of hosts playlist"
+                            />
                             <p className="playlists__container__paragraph__playlistname">{item.name}</p>
                         </section>
                     </div>

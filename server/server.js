@@ -15,7 +15,7 @@ const mxm_Api = process.env.EXPRESS_MXM_API;
 const client_id = process.env.EXPRESS_API_ID;
 const client_secret = process.env.EXPRESS_API_SECRET;
 const redirect_uri = process.env.EXPRESS_REDIRECT_URI;
-const session_secret = process.env.EXPRESS_SESSION_SECRET;
+// const session_secret = process.env.EXPRESS_SESSION_SECRET;
 const stateKey = 'spotify_auth_state';
 const mxm = new Musixmatch(mxm_Api)
 
@@ -35,7 +35,7 @@ app.use(express.static(__dirname + '/public'))
   .use(cookieParser());
 
 app.use(session({
-  secret: session_secret,
+  secret: 'skfgjljddfaeodaiudhiauhdiahsdiytuieodfgbnbghjklsdfgfhasdkjhdfcvn',
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -255,7 +255,7 @@ app.get('/refresh_token', (req, res) => {
         'access_token': access_token
       });
     })
-    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now 
+    .catch(err => console.log(err)) // make sure to have proper error messages here, but we log for now
 });
 
 console.log('Listening on 5000');
@@ -310,23 +310,24 @@ io.on('connection', (socket) => {
       io.emit('roominfo', users);
     })
   })
-// socket.on("kickEmOut", () => {
-//   const socketClients = Object.values(io.sockets.connected);
-//   const users = socketClients.filter(socket => socket.user).forEach(socket => socket.user = {
-//     username: '',
-//     isHost: false,
-//     id: socket.id,
-//     score: 0,
-//     gamemode: '',
-//     playlist: '',
-//     imageURL: ''
-//   })
-//   // users.splice(0, users.length)
-// })
+  // socket.on("kickEmOut", () => {
+  //   const socketClients = Object.values(io.sockets.connected);
+  //   const users = socketClients.filter(socket => socket.user).forEach(socket => socket.user = {
+  //     username: '',
+  //     isHost: false,
+  //     id: socket.id,
+  //     score: 0,
+  //     gamemode: '',
+  //     playlist: '',
+  //     imageURL: ''
+  //   })
+  //   // users.splice(0, users.length)
+  // })
   socket.on("disconnect", () => {
     // socketClients.forEach(clients => delete clients);
-    
-    
-    console.log("Client disconnected")});
-  })
+
+
+    console.log("Client disconnected")
+  });
+})
 // })

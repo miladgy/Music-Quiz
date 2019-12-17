@@ -40,6 +40,8 @@ class Waitingroom extends Component {
                 return "Guess the Song";
             case 'DisplayLyrics':
                 return "Guess the Lyrics";
+            default:
+                break;
         }
     }
 

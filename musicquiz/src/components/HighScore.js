@@ -63,14 +63,14 @@ class HighScore extends Component {
                     })}
                     <p className="high-score__summary__playlist paragraph">Songs were generated from:
                     </p>
-                <a className="high-score__btn__spotify"
-                            href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank">
-                            <img className="playlists__container__paragraph__thumbnail" src={this.state.imageURL} />
-                            <p className="high-score__btn__spotify__paragraph paragraph">This Playlist!</p>
-                        </a>
+                    <a className="high-score__btn__spotify"
+                        href={`https://open.spotify.com/playlist/${this.state.playlist}`} target="_blank" rel="noopener noreferrer">
+                        <img className="playlists__container__paragraph__thumbnail" src={this.state.imageURL} alt="a thumbnail for the playlist which the questions you played were generated" />
+                        <p className="high-score__btn__spotify__paragraph paragraph">This Playlist!</p>
+                    </a>
                     <Link className="btn high-score__btn__play-again" to="/">PLAY AGAIN</Link>
                 </div>
-            </div >
+            </div>
         )
     }
 }

@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 
 class Join extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     submitName = (e) => {
         e.preventDefault();
         this.props.socket.emit('join-game-as-player', e.target.elements.name.value);

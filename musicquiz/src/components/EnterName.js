@@ -2,11 +2,6 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 
 class EnterName extends Component {
-    constructor(props) {
-        super(props)
-
-    }
-
     componentDidMount() {
         const access_token = window.location.hash.split('=')[1].split('&')[0];
         this.props.setToken(access_token)
